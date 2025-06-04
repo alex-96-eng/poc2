@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { DeleteOutlineOutlined, FileUploadOutlined, InsertDriveFileOutlined, UploadFile } from "@mui/icons-material";
 import {
     alpha,
@@ -20,6 +20,7 @@ import {
     Typography
 } from "@mui/material";
 import { useDropzone } from "react-dropzone";
+import { formatData } from "@/lib/utils";
 
 interface UploadViewProps {
     handleUpload: ({ deliveryFile, supplierFile }: { deliveryFile: File, supplierFile: File }) => void;
@@ -27,26 +28,42 @@ interface UploadViewProps {
 
 const UploadView = ({ handleUpload }: UploadViewProps) => {
     // Delivery File
+    const [deliveryFile, setDeliveryFile] = useState<File | null>(null);
     const {
         acceptedFiles: deliveryAcceptedFiles,
         getRootProps: getDeliveryRootProps,
-        getInputProps: getDeliveryInputProps
+        getInputProps: getDeliveryInputProps,
     } = useDropzone({
+        onDrop: (acceptedFiles: File[]) => {
+            setDeliveryFile(acceptedFiles[0]);
+        },
+        maxFiles: 1,
         accept: {
             "application/pdf": [".pdf"]
         }
     });
+    const handleRemoveDeliveryFile = () => {
+        setDeliveryFile(null);
+    };
 
     // Supplier File
+    const [supplierFile, setSupplierFile] = useState<File | null>(null);
     const {
         acceptedFiles: supplierAcceptedFiles,
         getRootProps: getSupplierRootProps,
         getInputProps: getSupplierInputProps
     } = useDropzone({
+        onDrop: (acceptedFiles: File[]) => {
+            setSupplierFile(acceptedFiles[0]);
+        },
+        maxFiles: 1,
         accept: {
             "application/pdf": [".pdf"]
         }
     });
+    const handleRemoveSupplierFile = () => {
+        setSupplierFile(null);
+    };
 
     const handleClickUpload = () => {
         handleUpload({ deliveryFile: deliveryAcceptedFiles[0], supplierFile: supplierAcceptedFiles[0] });
@@ -63,51 +80,44 @@ const UploadView = ({ handleUpload }: UploadViewProps) => {
             <Box>
                 <CardHeader title="Upload Delivery PDF" subheader="Please upload the delivery PDF"/>
                 {
-                    deliveryAcceptedFiles.length
+                    deliveryFile
                         ? (
                             <Card>
                                 <List>
-                                    {
-                                        deliveryAcceptedFiles.map(file => (
-                                            <ListItem key={file.path}>
-                                                <ListItemAvatar sx={{ minWidth: 0, pr: 1 }}>
-                                                    <Stack
-                                                        alignItems="center"
-                                                        justifyContent="center"
-                                                        sx={(theme) => ({
-                                                            backgroundColor: alpha(theme.palette.primary.main, 0.16),
-                                                            borderRadius: `${theme.shape.borderRadius}px`,
-                                                            p: 1.5,
-                                                            aspectRatio: "1/1"
-                                                        })}
-                                                    >
-                                                        <InsertDriveFileOutlined sx={{ color: "primary.main" }}/>
-                                                    </Stack>
+                                    <ListItem>
+                                        <ListItemAvatar sx={{ minWidth: 0, pr: 1 }}>
+                                            <Stack
+                                                alignItems="center"
+                                                justifyContent="center"
+                                                sx={(theme) => ({
+                                                    backgroundColor: alpha(theme.palette.primary.main, 0.16),
+                                                    borderRadius: `${theme.shape.borderRadius}px`,
+                                                    p: 1.5,
+                                                    aspectRatio: "1/1"
+                                                })}
+                                            >
+                                                <InsertDriveFileOutlined sx={{ color: "primary.main" }}/>
+                                            </Stack>
 
-                                                </ListItemAvatar>
-                                                <ListItemText
-                                                    primary={file.name}
-                                                    // secondary={attachment.size ? formatData(attachment.size) : null}
-                                                    secondary={`${file.size.toFixed()} bytes`}
-                                                    slotProps={{
-                                                        primary: {
-                                                            variant: "body2",
-                                                            className: "truncate"
-                                                        }
-                                                    }}
-                                                />
-                                                <ListItemIcon>
-                                                    <Tooltip title="Remove">
-                                                        <IconButton
-                                                            // onClick={onClickPreview}
-                                                        >
-                                                            <DeleteOutlineOutlined/>
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                </ListItemIcon>
-                                            </ListItem>
-                                        ))
-                                    }
+                                        </ListItemAvatar>
+                                        <ListItemText
+                                            primary={deliveryFile.name}
+                                            secondary={deliveryFile.size ? formatData(deliveryFile.size) : null}
+                                            slotProps={{
+                                                primary: {
+                                                    variant: "body2",
+                                                    className: "truncate"
+                                                }
+                                            }}
+                                        />
+                                        <ListItemIcon>
+                                            <Tooltip title="Remove">
+                                                <IconButton onClick={handleRemoveDeliveryFile}>
+                                                    <DeleteOutlineOutlined/>
+                                                </IconButton>
+                                            </Tooltip>
+                                        </ListItemIcon>
+                                    </ListItem>
                                 </List>
                             </Card>
                         )
@@ -144,51 +154,44 @@ const UploadView = ({ handleUpload }: UploadViewProps) => {
             <Box sx={{ pb: 4 }}>
                 <CardHeader title="Upload Supplier PDF" subheader="Please upload the supplier PDF"/>
                 {
-                    supplierAcceptedFiles.length
+                    supplierFile
                         ? (
                             <Card>
                                 <List>
-                                    {
-                                        supplierAcceptedFiles.map(file => (
-                                            <ListItem key={file.path}>
-                                                <ListItemAvatar sx={{ minWidth: 0, pr: 1 }}>
-                                                    <Stack
-                                                        alignItems="center"
-                                                        justifyContent="center"
-                                                        sx={(theme) => ({
-                                                            backgroundColor: alpha(theme.palette.primary.main, 0.16),
-                                                            borderRadius: `${theme.shape.borderRadius}px`,
-                                                            p: 1.5,
-                                                            aspectRatio: "1/1"
-                                                        })}
-                                                    >
-                                                        <InsertDriveFileOutlined sx={{ color: "primary.main" }}/>
-                                                    </Stack>
+                                    <ListItem>
+                                        <ListItemAvatar sx={{ minWidth: 0, pr: 1 }}>
+                                            <Stack
+                                                alignItems="center"
+                                                justifyContent="center"
+                                                sx={(theme) => ({
+                                                    backgroundColor: alpha(theme.palette.primary.main, 0.16),
+                                                    borderRadius: `${theme.shape.borderRadius}px`,
+                                                    p: 1.5,
+                                                    aspectRatio: "1/1"
+                                                })}
+                                            >
+                                                <InsertDriveFileOutlined sx={{ color: "primary.main" }}/>
+                                            </Stack>
 
-                                                </ListItemAvatar>
-                                                <ListItemText
-                                                    primary={file.name}
-                                                    // secondary={attachment.size ? formatData(attachment.size) : null}
-                                                    secondary={`${file.size.toFixed()} bytes`}
-                                                    slotProps={{
-                                                        primary: {
-                                                            variant: "body2",
-                                                            className: "truncate"
-                                                        }
-                                                    }}
-                                                />
-                                                <ListItemIcon>
-                                                    <Tooltip title="Remove">
-                                                        <IconButton
-                                                            // onClick={onClickPreview}
-                                                        >
-                                                            <DeleteOutlineOutlined/>
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                </ListItemIcon>
-                                            </ListItem>
-                                        ))
-                                    }
+                                        </ListItemAvatar>
+                                        <ListItemText
+                                            primary={supplierFile.name}
+                                            secondary={supplierFile.size ? formatData(supplierFile.size) : null}
+                                            slotProps={{
+                                                primary: {
+                                                    variant: "body2",
+                                                    className: "truncate"
+                                                }
+                                            }}
+                                        />
+                                        <ListItemIcon>
+                                            <Tooltip title="Remove">
+                                                <IconButton onClick={handleRemoveSupplierFile}>
+                                                    <DeleteOutlineOutlined/>
+                                                </IconButton>
+                                            </Tooltip>
+                                        </ListItemIcon>
+                                    </ListItem>
                                 </List>
                             </Card>
                         )

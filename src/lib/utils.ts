@@ -20,3 +20,21 @@ export function formatDate(date?: Date | string | number | null, newFormat?: str
     const fm = newFormat || "dd MMM yyyy";
     return date ? format(new Date(date), fm) : "";
 }
+
+export function formatData(inputValue: string | number | null) {
+    if (!inputValue) return "";
+
+    if (inputValue === 0) return "0 Bytes";
+
+    const units = ["bytes", "Kb", "Mb", "Gb", "Tb", "Pb", "Eb", "Zb", "Yb"];
+
+    const decimal = 2;
+
+    const baseValue = 1024;
+
+    const number = Number(inputValue);
+
+    const index = Math.floor(Math.log(number) / Math.log(baseValue));
+
+    return `${parseFloat((number / baseValue ** index).toFixed(decimal))} ${units[index]}`;
+}
