@@ -13,17 +13,12 @@
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^7.1.1",
     "@mui/material": "^7.1.1",
-    "@shadcn/ui": "^0.0.4",
-    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "formidable": "^3.5.4",
-    "lucide-react": "^0.512.0",
     "next": "15.3.3",
     "pdf-parse": "^1.1.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "tailwind-merge": "^3.3.0",
-    "zustand": "^5.0.5"
+    "tailwind-merge": "^3.3.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
