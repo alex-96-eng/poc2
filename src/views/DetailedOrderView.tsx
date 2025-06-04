@@ -7,7 +7,7 @@ import FormProvider from "@/components/hook-form/FormProvider";
 import { useForm } from "react-hook-form";
 import WardrobeDetailsForm from "@/components/WardrobeDetailsForm";
 import WardrobeVisual from "@/components/WardrobeVisual";
-import { ParsedResponse, ParsedResponseSchema, Wardrobe } from "@/types";
+import { ParsedResponse, ParsedResponseSchema } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import PurchaseOrderInfoForm from "@/components/PurchaseOrderInfoForm";
 import DeliveryInformationForm from "@/components/DeliveryInformationForm";
@@ -39,23 +39,16 @@ type DetailedOrderViewProps = {
 }
 
 export default function DetailedOrderView({ initialData }: DetailedOrderViewProps) {
-    const [deliveryInfo] = useState(initialData.deliveryInfo);
-    const [supplierHeader] = useState(initialData.supplierHeader);
-    const [wardrobes] = useState<Wardrobe[]>(initialData.wardrobes);
-
-    const handleReview = () => {
-        // If you still want to re‐encode & push to /review, do so here
-        const combined = { deliveryInfo, supplierHeader, wardrobes };
-        const json = encodeURIComponent(JSON.stringify(combined));
-        window.location.href = `/review?data=${json}`;
-    };
-
     const methods = useForm<ParsedResponse>({
         reValidateMode: "onChange",
         mode: "onChange",
         defaultValues: initialData,
         resolver: zodResolver(ParsedResponseSchema)
     });
+
+    const wardrobes = methods.watch("wardrobes");
+    const supplierHeader = methods.watch("supplierHeader");
+    const deliveryInfo = methods.watch("deliveryInfo");
 
     const [isReviewMode, setIsReviewMode] = useState(false);
     const handleClickReview = methods.handleSubmit(() => {
@@ -97,8 +90,6 @@ export default function DetailedOrderView({ initialData }: DetailedOrderViewProp
         </Stack>
     );
 
-    const watchValues = methods.watch();
-
     const handleClickEdit = () => {
         setIsReviewMode(false);
     };
@@ -131,67 +122,67 @@ export default function DetailedOrderView({ initialData }: DetailedOrderViewProp
                                 <Grid size={6}>
                                     <DescriptionItem
                                         label="Supplier Order #"
-                                        value={watchValues.supplierHeader.orderNumber}
+                                        value={supplierHeader.orderNumber}
                                     />
                                 </Grid>
                                 <Grid size={6}>
                                     <DescriptionItem
                                         label="Date Ordered"
-                                        value={formatDate(watchValues.supplierHeader.dateOrdered)}
+                                        value={formatDate(supplierHeader.dateOrdered)}
                                     />
                                 </Grid>
                                 <Grid size={12}>
                                     <DescriptionItem
                                         label="No. of Wardrobes"
-                                        value={watchValues.supplierHeader.numberOfWardrobes}
+                                        value={supplierHeader.numberOfWardrobes}
                                     />
                                 </Grid>
                                 <Grid size={6}>
                                     <DescriptionItem
                                         label="Net Goods"
-                                        value={watchValues.supplierHeader.netGoods}
+                                        value={supplierHeader.netGoods}
                                     />
                                 </Grid>
                                 <Grid size={6}>
                                     <DescriptionItem
                                         label="Net Delivery"
-                                        value={watchValues.supplierHeader.netDelivery}
+                                        value={supplierHeader.netDelivery}
                                     />
                                 </Grid>
                                 <Grid size={6}>
                                     <DescriptionItem
                                         label="Discount %"
-                                        value={watchValues.supplierHeader.discountPercent}
+                                        value={supplierHeader.discountPercent}
                                     />
                                 </Grid>
                                 <Grid size={6}>
                                     <DescriptionItem
                                         label="Discount Amount"
-                                        value={watchValues.supplierHeader.discountAmount}
+                                        value={supplierHeader.discountAmount}
                                     />
                                 </Grid>
                                 <Grid size={12}>
                                     <DescriptionItem
                                         label="Admin Charge"
-                                        value={watchValues.supplierHeader.supplierAdminCharge}
+                                        value={supplierHeader.supplierAdminCharge}
                                     />
                                 </Grid>
                                 <Grid size={6}>
                                     <DescriptionItem
                                         label="Net Total"
-                                        value={watchValues.supplierHeader.netTotal}
+                                        value={supplierHeader.netTotal}
                                     />
                                 </Grid>
                                 <Grid size={6}>
                                     <DescriptionItem
                                         label="VAT"
-                                        value={watchValues.supplierHeader.vat}
+                                        value={supplierHeader.vat}
                                     />
                                 </Grid>
                                 <Grid size={6}>
                                     <DescriptionItem
                                         label="Gross Total"
-                                        value={watchValues.supplierHeader.grossTotal}
+                                        value={supplierHeader.grossTotal}
                                     />
                                 </Grid>
                             </Grid>
@@ -206,55 +197,55 @@ export default function DetailedOrderView({ initialData }: DetailedOrderViewProp
                                 <Grid size={6}>
                                     <DescriptionItem
                                         label="Order Number"
-                                        value={watchValues.deliveryInfo.orderNumber}
+                                        value={deliveryInfo.orderNumber}
                                     />
                                 </Grid>
                                 <Grid size={6}>
                                     <DescriptionItem
                                         label="Date Ordered"
-                                        value={formatDate(watchValues.deliveryInfo.dateOrdered)}
+                                        value={formatDate(deliveryInfo.dateOrdered)}
                                     />
                                 </Grid>
                                 <Grid size={6}>
                                     <DescriptionItem
                                         label="No. of Wardrobes"
-                                        value={watchValues.deliveryInfo.numberOfWardrobes}
+                                        value={deliveryInfo.numberOfWardrobes}
                                     />
                                 </Grid>
                                 <Grid size={6}>
                                     <DescriptionItem
                                         label="Customer Name"
-                                        value={watchValues.deliveryInfo.customerName}
+                                        value={deliveryInfo.customerName}
                                     />
                                 </Grid>
                                 <Grid size={6}>
                                     <DescriptionItem
                                         label="Phone"
-                                        value={watchValues.deliveryInfo.customerPhone}
+                                        value={deliveryInfo.customerPhone}
                                     />
                                 </Grid>
                                 <Grid size={6}>
                                     <DescriptionItem
                                         label="Address Line 1"
-                                        value={watchValues.deliveryInfo.addressLine1}
+                                        value={deliveryInfo.addressLine1}
                                     />
                                 </Grid>
                                 <Grid size={6}>
                                     <DescriptionItem
                                         label="Address Line 2"
-                                        value={watchValues.deliveryInfo.addressLine2}
+                                        value={deliveryInfo.addressLine2}
                                     />
                                 </Grid>
                                 <Grid size={6}>
                                     <DescriptionItem
                                         label="Address Line 3"
-                                        value={watchValues.deliveryInfo.addressLine3}
+                                        value={deliveryInfo.addressLine3}
                                     />
                                 </Grid>
                                 <Grid size={12}>
                                     <DescriptionItem
                                         label="Delivery Notes"
-                                        value={watchValues.deliveryInfo.deliveryNotes}
+                                        value={deliveryInfo.deliveryNotes}
                                     />
                                 </Grid>
                             </Grid>
@@ -272,49 +263,49 @@ export default function DetailedOrderView({ initialData }: DetailedOrderViewProp
                                             <Grid size={6}>
                                                 <DescriptionItem
                                                     label="Opening Width (mm)"
-                                                    value={watchValues.wardrobes[wIdx].dims.slidingOpeningWidth}
+                                                    value={wardrobes[wIdx].dims.slidingOpeningWidth}
                                                 />
                                             </Grid>
                                             <Grid size={6}>
                                                 <DescriptionItem
                                                     label="Opening Height (mm)"
-                                                    value={watchValues.wardrobes[wIdx].dims.slidingOpeningHeight}
+                                                    value={wardrobes[wIdx].dims.slidingOpeningHeight}
                                                 />
                                             </Grid>
                                             <Grid size={6}>
                                                 <DescriptionItem
                                                     label="Door Width (mm)"
-                                                    value={watchValues.wardrobes[wIdx].dims.doorWidth}
+                                                    value={wardrobes[wIdx].dims.doorWidth}
                                                 />
                                             </Grid>
                                             <Grid size={6}>
                                                 <DescriptionItem
                                                     label="Front Door Type"
-                                                    value={watchValues.wardrobes[wIdx].dims.frontDoorType}
+                                                    value={wardrobes[wIdx].dims.frontDoorType}
                                                 />
                                             </Grid>
                                             <Grid size={6}>
                                                 <DescriptionItem
                                                     label="Rear Door Type"
-                                                    value={watchValues.wardrobes[wIdx].dims.rearDoorType}
+                                                    value={wardrobes[wIdx].dims.rearDoorType}
                                                 />
                                             </Grid>
                                             <Grid size={6}>
                                                 <DescriptionItem
                                                     label="Framework Type"
-                                                    value={watchValues.wardrobes[wIdx].dims.frameworkType}
+                                                    value={wardrobes[wIdx].dims.frameworkType}
                                                 />
                                             </Grid>
                                             <Grid size={6}>
                                                 <DescriptionItem
                                                     label="Framework Colour"
-                                                    value={watchValues.wardrobes[wIdx].dims.frameworkColour}
+                                                    value={wardrobes[wIdx].dims.frameworkColour}
                                                 />
                                             </Grid>
                                             <Grid size={6}>
                                                 <DescriptionItem
                                                     label="Track Length (mm)"
-                                                    value={watchValues.wardrobes[wIdx].dims.trackLength}
+                                                    value={wardrobes[wIdx].dims.trackLength}
                                                 />
                                             </Grid>
                                         </Grid>
@@ -324,7 +315,7 @@ export default function DetailedOrderView({ initialData }: DetailedOrderViewProp
                                             </Typography>
                                             <Grid container spacing={2}>
                                                 {
-                                                    watchValues.wardrobes[wIdx].doorDetails.map((doorDetail, dIdx) => (
+                                                    wardrobes[wIdx].doorDetails.map((doorDetail, dIdx) => (
                                                         <Grid key={dIdx} size={3}>
                                                             <DoorCard door={doorDetail}/>
                                                         </Grid>
@@ -339,7 +330,7 @@ export default function DetailedOrderView({ initialData }: DetailedOrderViewProp
                                             </Typography>
                                             <Grid container spacing={2}>
                                                 {
-                                                    watchValues.wardrobes[wIdx].accessories.map((accessory, aIdx) => (
+                                                    wardrobes[wIdx].accessories.map((accessory, aIdx) => (
                                                         <Grid key={aIdx} size={6}>
                                                             <AccessoryCard accessory={accessory}/>
                                                         </Grid>
