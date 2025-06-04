@@ -60,7 +60,7 @@ export default function UploadView() {
         <Stack
             justifyContent="center"
             alignItems="center"
-            sx={{ flexGrow: 1, height: "100vh", px: 2 }}
+            sx={{ flexGrow: 1, px: 2 }}
         >
             <CardHeader
                 title="Upload File"
