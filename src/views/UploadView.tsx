@@ -58,10 +58,7 @@ const UploadView = ({ handleUpload }: UploadViewProps) => {
         <Stack
             spacing={4}
             justifyContent="center"
-            sx={{
-                flexGrow: 1,
-                height: "100vh", // full viewport height
-            }}
+            sx={{ flexGrow: 1 }}
         >
             <Box>
                 <CardHeader title="Upload Delivery PDF" subheader="Please upload the delivery PDF"/>

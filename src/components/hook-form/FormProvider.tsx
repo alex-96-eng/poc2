@@ -1,13 +1,13 @@
 "use client";
 
-import { ReactNode } from "react";
+import { CSSProperties, ReactNode } from "react";
 import { FormProvider as RhfFormProvider, UseFormReturn } from "react-hook-form";
 
 type Props = {
     children: ReactNode;
     methods: UseFormReturn<any>;
     onSubmit?: VoidFunction;
-    className?: string;
+    style?: CSSProperties;
 };
 
 /**
@@ -36,10 +36,10 @@ type Props = {
  * );
  * ```
  */
-const FormProvider = ({ children, onSubmit, methods, className = "" }: Props) => {
+const FormProvider = ({ children, onSubmit, methods, style }: Props) => {
     return (
         <RhfFormProvider  {...methods}>
-            <form className={className} onSubmit={onSubmit}>
+            <form onSubmit={onSubmit} style={{ ...style }}>
                 {children}
             </form>
         </RhfFormProvider>

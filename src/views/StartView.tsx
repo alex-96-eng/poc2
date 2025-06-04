@@ -8,7 +8,7 @@ type StartViewProps = {
 const StartView = ({ handleStart }: StartViewProps) => {
     return (
         <Stack
-            sx={{ height: "100%", width: "100%" }}
+            sx={{ height: "100%", width: "100%", flexGrow: 1 }}
             alignItems="center"
             justifyContent="center"
         >

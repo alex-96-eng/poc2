@@ -49,22 +49,15 @@ export default function Page() {
                 <Container
                     maxWidth="md"
                     sx={{
-                        height: "100%",
+                        minHeight: "100%",
+                        display: "flex",
+                        flexDirection: "column",
                         width: "100%",
                         py: 4,
                         backgroundColor: "background.paper",
                     }}
                 >
-                    <Stack
-                        direction="row"
-                        sx={{
-                            flexGrow: 1,
-                            height: "100%",
-                            width: "100%",
-                        }}
-                    >
-                        <OrderFlow/>
-                    </Stack>
+                    <OrderFlow/>
                 </Container>
             </Box>
         </Stack>

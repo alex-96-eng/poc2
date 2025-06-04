@@ -23,6 +23,11 @@ const theme = createTheme({
                 variant: "outlined"
             }
         },
+        MuiButton: {
+            defaultProps: {
+                disableElevation: true
+            }
+        }
     }
 });
 
