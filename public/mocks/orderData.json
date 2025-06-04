@@ -1,0 +1,190 @@
+{
+  "deliveryInfo": {
+    "orderNumber": "MSW-16997",
+    "dateOrdered": "31/03/2025",
+    "numberOfWardrobes": "3",
+    "customerName": "Miss Nicola Wilson",
+    "addressLine1": "13 Scholar Place",
+    "addressLine2": "Oxford",
+    "addressLine3": "OX2 9RD",
+    "customerPhone": "07827995039",
+    "deliveryNotes": "We will be on holiday 5th to 12th April, please arrange delivery before or after. My Sliding Wardrobe/courier to call ahead."
+  },
+  "supplierHeader": {
+    "orderNumber": "MSW-16997",
+    "dateOrdered": "31/03/2025",
+    "numberOfWardrobes": "3",
+    "netGoods": "£XXX.XX",
+    "netDelivery": "£XX.XX",
+    "discountPercent": "XX%",
+    "discountAmount": "£XX.XX",
+    "supplierAdminCharge": "No",
+    "netTotal": "£XXX.XX",
+    "vat": "£XX.XX",
+    "grossTotal": "£XXX.XX"
+  },
+  "wardrobes": [
+    {
+      "wardrobeNumber": 1,
+      "dims": {
+        "slidingOpeningWidth": "1272",
+        "slidingOpeningHeight": "2310",
+        "doorWidth": "656",
+        "frontDoorType": "Denver Single Panel",
+        "rearDoorType": "Denver Single Panel",
+        "frameworkType": "Steel S200",
+        "frameworkColour": "Bright White",
+        "trackLength": "2000"
+      },
+      "doorDetails": [
+        {
+          "doorNumber": "Door 1",
+          "quantity": "1",
+          "doorCost": "£107.80",
+          "softClose": "Left",
+          "doorPanel": "Mirror (Mirror)"
+        },
+        {
+          "doorNumber": "Door 2",
+          "quantity": "1",
+          "doorCost": "£94.60",
+          "softClose": "None",
+          "doorPanel": "Mirror (Mirror)"
+        },
+        {
+          "doorNumber": "Door 3",
+          "quantity": "1",
+          "doorCost": "£107.80",
+          "softClose": "Right",
+          "doorPanel": "Mirror (Mirror)"
+        },
+        {
+          "doorNumber": "Door 4",
+          "quantity": "1",
+          "doorCost": "£94.60",
+          "softClose": "None",
+          "doorPanel": "Mirror (Mirror)"
+        }
+      ],
+      "accessories": [
+        {
+          "quantity": "2",
+          "componentName": "Soft Close Device & Adapter Plates (Grey)",
+          "netCost": "£0.00"
+        },
+        {
+          "quantity": "1",
+          "componentName": "Door Positioner (Chrome)",
+          "netCost": "£0.41"
+        }
+      ]
+    },
+    {
+      "wardrobeNumber": 2,
+      "dims": {
+        "slidingOpeningWidth": "2072",
+        "slidingOpeningHeight": "2310",
+        "doorWidth": "1056",
+        "frontDoorType": "Denver Single Panel",
+        "rearDoorType": "Denver Single Panel",
+        "frameworkType": "Steel S200",
+        "frameworkColour": "Bright White",
+        "trackLength": "3000"
+      },
+      "doorDetails": [
+        {
+          "doorNumber": "Door 1",
+          "quantity": "1",
+          "doorCost": "£117.70",
+          "softClose": "Left",
+          "doorPanel": "Matt White (Matt Woodwork)"
+        },
+        {
+          "doorNumber": "Door 2",
+          "quantity": "1",
+          "doorCost": "£117.70",
+          "softClose": "Right",
+          "doorPanel": "Matt White (Matt Woodwork)"
+        }
+      ],
+      "accessories": [
+        {
+          "quantity": "2",
+          "componentName": "25mm Hanging Rail Connector (4-way in 2 halves) (Chrome)",
+          "netCost": "£0.00"
+        },
+        {
+          "quantity": "6",
+          "componentName": "25mm Hanging Rail Brackets (side mounted cup) (Chrome)",
+          "netCost": "£0.00"
+        },
+        {
+          "quantity": "3",
+          "componentName": "25mm Hanging Rail Pole (3000mm round tube) (Chrome)",
+          "netCost": "£0.00"
+        },
+        {
+          "quantity": "3",
+          "componentName": "MSW Screw Pack (screws/plugs/brackets)",
+          "netCost": "£0.00"
+        }
+      ]
+    },
+    {
+      "wardrobeNumber": 3,
+      "dims": {
+        "slidingOpeningWidth": "1827",
+        "slidingOpeningHeight": "2310",
+        "doorWidth": "933",
+        "frontDoorType": "Denver Single Panel",
+        "rearDoorType": "Denver Single Panel",
+        "frameworkType": "Steel S200",
+        "frameworkColour": "Bright White",
+        "trackLength": "2000"
+      },
+      "doorDetails": [
+        {
+          "doorNumber": "Door 1",
+          "quantity": "1",
+          "doorCost": "£107.80",
+          "softClose": "Left",
+          "doorPanel": "Matt White (Matt Woodwork)"
+        },
+        {
+          "doorNumber": "Door 2",
+          "quantity": "1",
+          "doorCost": "£107.80",
+          "softClose": "Right",
+          "doorPanel": "Matt White (Matt Woodwork)"
+        }
+      ],
+      "accessories": [
+        {
+          "quantity": "2",
+          "componentName": "Soft Close Device & Adapter Plates (Grey)",
+          "netCost": "£0.00"
+        },
+        {
+          "quantity": "4",
+          "componentName": "25mm Hanging Rail Brackets (Chrome)",
+          "netCost": "£0.00"
+        },
+        {
+          "quantity": "1",
+          "componentName": "25mm Hanging Rail Connector (Chrome)",
+          "netCost": "£0.00"
+        },
+        {
+          "quantity": "1",
+          "componentName": "Adhesive Tube & Screw Fixing Kit (for acoustic slatwall)",
+          "netCost": "£7.01"
+        },
+        {
+          "quantity": "1",
+          "componentName": "Sealant Tube & Screw Caps Finishing Kit (for internals & casing) (Matt White)",
+          "netCost": "£0.00"
+        }
+      ]
+    }
+  ]
+}
