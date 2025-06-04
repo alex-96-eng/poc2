@@ -1,13 +1,17 @@
-import { Card, CardContent, CardHeader, Grid } from "@mui/material";
+import { Box, CardContent, CardHeader, Grid, MenuItem } from "@mui/material";
 import RHFTextField from "@/components/hook-form/RHFTextField";
+import RHFDatePicker from "./hook-form/RHFDatePicker";
+import RHFSelect from "./hook-form/RHFSelect";
+import { SupplierAdminChargeType } from "@/types";
 
-const PurchaseOrderInfoCard = () => {
+const PurchaseOrderInfoForm = () => {
     return (
-        <Card>
+        <Box>
             <CardHeader
+                sx={{ px: 0 }}
                 title="Supplier Purchase Order Info"
             />
-            <CardContent>
+            <CardContent sx={{ px: 0 }}>
                 <Grid spacing={2} container>
                     <Grid size={6}>
                         <RHFTextField
@@ -16,7 +20,7 @@ const PurchaseOrderInfoCard = () => {
                         />
                     </Grid>
                     <Grid size={6}>
-                        <RHFTextField
+                        <RHFDatePicker
                             label="Date Ordered"
                             name="supplierHeader.dateOrdered"
                         />
@@ -52,10 +56,15 @@ const PurchaseOrderInfoCard = () => {
                         />
                     </Grid>
                     <Grid size={12}>
-                        <RHFTextField
-                            label="Admin Charge"
-                            name="supplierHeader.supplierAdminCharge"
-                        />
+                        <RHFSelect label="Admin Charge" name="supplierHeader.supplierAdminCharge">
+                            {
+                                [SupplierAdminChargeType.Yes, SupplierAdminChargeType.No].map((option) => (
+                                    <MenuItem key={option} value={option}>
+                                        {option}
+                                    </MenuItem>
+                                ))
+                            }
+                        </RHFSelect>
                     </Grid>
                     <Grid size={6}>
                         <RHFTextField
@@ -77,8 +86,8 @@ const PurchaseOrderInfoCard = () => {
                     </Grid>
                 </Grid>
             </CardContent>
-        </Card>
+        </Box>
     );
 };
 
-export default PurchaseOrderInfoCard;
+export default PurchaseOrderInfoForm;

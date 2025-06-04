@@ -1,24 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
-import Divider from "@mui/material/Divider";
-import Typography from "@mui/material/Typography";
-import { Grid } from "@mui/material";
+import { Box, CardHeader, Stack } from "@mui/material";
 import FormProvider from "@/components/hook-form/FormProvider";
 import { useForm } from "react-hook-form";
-import PurchaseOrderInfoCard from "@/components/PurchaseOrderInfoCard";
-import DeliveryInformationCard from "@/components/DeliveryInformationCard";
-import WardrobeDetailsCard from "@/components/WardrobeDetailsCard";
+import WardrobeDetailsForm from "@/components/WardrobeDetailsForm";
 import WardrobeVisual from "@/components/WardrobeVisual";
-import { DeliveryInfo, ParsedResponse, SupplierHeader, Wardrobe } from "@/types";
+import { ParsedResponse, ParsedResponseSchema, Wardrobe } from "@/types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import PurchaseOrderInfoForm from "@/components/PurchaseOrderInfoForm";
+import DeliveryInformationForm from "@/components/DeliveryInformationForm";
+import Divider from "@mui/material/Divider";
 
 type DetailedOrderViewProps = {
     initialData: ParsedResponse;
 }
 
 export default function DetailedOrderView({ initialData }: DetailedOrderViewProps) {
-    // Initialize all state from the server‐parsed JSON
     const [deliveryInfo] = useState(initialData.deliveryInfo);
     const [supplierHeader] = useState(initialData.supplierHeader);
     const [wardrobes] = useState<Wardrobe[]>(initialData.wardrobes);
@@ -30,55 +29,77 @@ export default function DetailedOrderView({ initialData }: DetailedOrderViewProp
         window.location.href = `/review?data=${json}`;
     };
 
-    const methods = useForm<{
-        deliveryInfo: DeliveryInfo;
-        supplierHeader: SupplierHeader;
-        wardrobes: Wardrobe[];
-    }>({
+    const methods = useForm<ParsedResponse>({
         reValidateMode: "onChange",
         mode: "onChange",
-        defaultValues: initialData
+        defaultValues: initialData,
+        resolver: zodResolver(ParsedResponseSchema)
     });
+
+    const [isReviewMode, setIsReviewMode] = useState(false);
+    const handleClickReview = methods.handleSubmit(() => {
+        setIsReviewMode(true);
+    });
+
+    useEffect(() => {
+        console.log(isReviewMode);
+    }, [isReviewMode]);
+
+    const renderForm = (
+        <Stack spacing={2}>
+            <PurchaseOrderInfoForm/>
+            <Divider/>
+            <DeliveryInformationForm/>
+            <Divider/>
+            {
+                wardrobes.map((w, wIdx) => (
+                    <Box key={wIdx}>
+                        <CardHeader
+                            sx={{ px: 0 }}
+                            title={`Wardrobe #${w.wardrobeNumber} Details`}
+                        />
+                        <WardrobeVisual wardrobe={w}/>
+                        <WardrobeDetailsForm
+                            wardrobe={w}
+                            wardrobeIndex={wIdx}
+                        />
+                    </Box>
+                ))
+            }
+            <Button variant="contained" onClick={handleClickReview}>
+                Review
+            </Button>
+        </Stack>
+    );
+
+    const renderReview = (
+        <>
+            <Button
+                variant="outlined"
+                onClick={() => {
+                    setIsReviewMode(false);
+                }}
+            >
+                Edit
+            </Button>
+            <Button
+                variant="contained"
+                onClick={() => {
+                    alert("DONE!");
+                }}
+            >
+                Upload to Unleashed
+            </Button>
+        </>
+    );
 
     return (
         <FormProvider methods={methods}>
-            <Grid
-                container
-                spacing={2}
-            >
-                <Grid size={{ xs: 12, md: 6 }}>
-                    <PurchaseOrderInfoCard/>
-                </Grid>
-
-                <Grid size={{ xs: 12, md: 6 }}>
-                    <DeliveryInformationCard/>
-                </Grid>
-
-                {
-                    wardrobes.map((w, wIdx) => (
-                        <Grid size={12} key={wIdx}>
-                            {/* 1) Visual for THIS wardrobe */}
-                            <Typography variant="h6" gutterBottom>
-                                Wardrobe #{w.wardrobeNumber} Visual
-                            </Typography>
-                            <Divider sx={{ mb: 2 }}/>
-
-                            <WardrobeVisual
-                                wardrobe={w}
-                            />
-
-                            <WardrobeDetailsCard
-                                wardrobe={w}
-                                wardrobeIndex={wIdx}
-                            />
-
-                        </Grid>
-                    ))}
-            </Grid>
-
-            <Button variant="contained" onClick={handleReview}>
-                Review
-            </Button>
+            {
+                isReviewMode
+                    ? renderReview
+                    : renderForm
+            }
         </FormProvider>
     );
 }

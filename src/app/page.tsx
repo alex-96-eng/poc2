@@ -4,6 +4,7 @@ import React from "react";
 import OrderFlow from "@/components/OrderFlow";
 import { Box, Container, Stack } from "@mui/material";
 import Image from "next/image";
+import Typography from "@mui/material/Typography";
 
 export default function Page() {
     return (
@@ -34,7 +35,9 @@ export default function Page() {
                         left: 16,
                     }}
                 />
-                <OrderFlow/>
+                <Typography>
+                    TODO: STEPPER
+                </Typography>
             </Stack>
 
             <Box
@@ -46,6 +49,8 @@ export default function Page() {
                 <Container
                     maxWidth="md"
                     sx={{
+                        height: "100%",
+                        width: "100%",
                         py: 4,
                         backgroundColor: "background.paper",
                     }}
@@ -54,6 +59,8 @@ export default function Page() {
                         direction="row"
                         sx={{
                             flexGrow: 1,
+                            height: "100%",
+                            width: "100%",
                         }}
                     >
                         <OrderFlow/>

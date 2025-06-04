@@ -1,8 +1,16 @@
 "use client";
 
-import React from "react";
 import { useRouter } from "next/navigation";
-import { Accordion, Typography, TextField, Paper, AccordionDetails, AccordionSummary, Box, Button,  } from "@mui/material";
+import {
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
+    Box,
+    Button,
+    Paper,
+    TextField,
+    Typography,
+} from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { DeliveryInfo, SupplierHeader, Wardrobe } from "@/types";
 
@@ -17,7 +25,7 @@ interface ReviewProps {
     onUpload: () => void;
 }
 
-const Review: React.FC<ReviewProps> = ({ data, onUpload }) => {
+const ReviewView = ({ data, onUpload }: ReviewProps) => {
     const router = useRouter();
     const { deliveryInfo, supplierHeader, wardrobes } = data;
 
@@ -454,4 +462,4 @@ const Review: React.FC<ReviewProps> = ({ data, onUpload }) => {
     );
 };
 
-export default Review;
+export default ReviewView;

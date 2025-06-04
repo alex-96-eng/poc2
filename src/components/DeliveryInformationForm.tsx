@@ -1,11 +1,17 @@
-import { Card, CardContent, CardHeader, Grid } from "@mui/material";
+import { Box, CardContent, CardHeader, Grid } from "@mui/material";
 import RHFTextField from "@/components/hook-form/RHFTextField";
+import RHFDatePicker from "@/components/hook-form/RHFDatePicker";
 
-const DeliveryInformationCard = () => {
+const DeliveryInformationForm = () => {
     return (
-        <Card>
-            <CardHeader title="Delivery Information"/>
-            <CardContent>
+        <Box>
+            <CardHeader
+                sx={{ px: 0 }}
+                title="Delivery Information"
+            />
+            <CardContent
+                sx={{ px: 0 }}
+            >
                 <Grid spacing={2} container>
                     <Grid size={6}>
                         <RHFTextField
@@ -14,7 +20,7 @@ const DeliveryInformationCard = () => {
                         />
                     </Grid>
                     <Grid size={6}>
-                        <RHFTextField
+                        <RHFDatePicker
                             label="Date Ordered"
                             name="deliveryInfo.dateOrdered"
                         />
@@ -65,8 +71,8 @@ const DeliveryInformationCard = () => {
                     </Grid>
                 </Grid>
             </CardContent>
-        </Card>
+        </Box>
     );
 };
 
-export default DeliveryInformationCard;
+export default DeliveryInformationForm;

@@ -1,108 +1,76 @@
 import { Box, Stack, Typography } from "@mui/material";
-import { Wardrobe } from "@/views/DetailedOrderView";
+import { Wardrobe } from "@/types";
+import Divider from "@mui/material/Divider";
 
 type WardrobeVisualProps = {
     wardrobe: Wardrobe;
 }
 const WardrobeVisual = ({ wardrobe }: WardrobeVisualProps) => {
     return (
-        <Box
-            sx={{
-                display: "flex",
-                justifyContent: "center",
-                flexWrap: "wrap",
-                gap: 4,
-                mb: 4,
-            }}
-        >
+        <Stack direction="row" spacing={5} justifyContent="center" flexWrap="wrap">
             {
                 wardrobe.doorDetails.map((door, dIdx) => (
                     <Stack
-                        spacing={1}
+                        spacing={0.5}
                         alignItems="center"
                         key={dIdx}
+                        direction="row"
                     >
-                        <Box
-                            sx={{
-                                position: "relative",
-                                width: 150,
-                                height: 375,
-                                bgcolor: "#f9f9f9",
-                                border: "2px solid #374151",
-                            }}
-                        >
-                            {/* Vertical dashed line */}
-                            <Box
-                                sx={{
-                                    position: "absolute",
-                                    right: -25,
-                                    top: 0,
-                                    height: "100%",
-                                    width: 0,
-                                    borderRight: "1px dashed #6b7280",
-                                }}
-                            />
-                            <Typography
-                                variant="body2"
-                                sx={{
-                                    position: "absolute",
-                                    right: -70,
-                                    top: "50%",
-                                    transform: "translateY(-50%) rotate(90deg)",
-                                    fontSize: 12,
-                                    color: "text.secondary",
-                                }}
-                            >
-                                {wardrobe.dims.slidingOpeningHeight} mm
+                        <Stack spacing={1}>
+                            <Typography variant="subtitle2" sx={{ textAlign: "center" }}>
+                                {door.doorNumber}
                             </Typography>
 
-                            {/* Horizontal dashed line */}
-                            <Box
-                                sx={{
-                                    position: "absolute",
-                                    bottom: -25,
-                                    left: 0,
-                                    width: "100%",
-                                    height: 0,
-                                    borderBottom: "1px dashed #6b7280",
-                                }}
-                            />
                             <Typography
-                                variant="body2"
+                                variant="caption"
                                 sx={{
-                                    position: "absolute",
-                                    bottom: -50,
-                                    left: "50%",
-                                    transform: "translateX(-50%)",
-                                    fontSize: 12,
-                                    color: "text.secondary",
-                                }}
-                            >
-                                {wardrobe.dims.doorWidth} mm
-                            </Typography>
-
-                            {/* Door panel label */}
-                            <Typography
-                                variant="body2"
-                                sx={{
-                                    position: "absolute",
-                                    top: -28,
-                                    left: "50%",
-                                    transform: "translateX(-50%)",
-                                    fontSize: 12,
+                                    textAlign: "center",
                                     color: "text.secondary",
                                 }}
                             >
                                 {door.doorPanel}
                             </Typography>
-                        </Box>
-                        <Typography variant="subtitle2" sx={{ fontSize: 14 }}>
-                            {door.doorNumber}
-                        </Typography>
+                            <Box
+                                sx={{
+                                    position: "relative",
+                                    width: 150,
+                                    height: 375,
+                                    bgcolor: "background.default",
+                                    borderColor: "text.secondary",
+                                    borderWidth: 2,
+                                    borderStyle: "solid"
+                                }}
+                            >
+                                <Stack direction="row" alignItems="center" justifyContent="center"
+                                       sx={{ position: "absolute", top: 0, right: -28, height: "100%" }}
+                                >
+                                    <Divider
+                                        orientation="vertical"
+                                        flexItem
+                                        sx={{ height: 375, borderStyle: "dashed" }}
+                                    />
+                                    <Typography
+                                        variant="caption"
+                                        sx={{
+                                            color: "text.secondary",
+                                            textOrientation: "sideways",
+                                            textAlign: "center",
+                                            writingMode: "vertical-lr"
+                                        }}
+                                    >
+                                        {wardrobe.dims.slidingOpeningHeight} mm
+                                    </Typography>
+                                </Stack>
+                            </Box>
+                            <Divider flexItem sx={{ borderStyle: "dashed" }}/>
+                            <Typography variant="caption" sx={{ color: "text.secondary", textAlign: "center" }}>
+                                {wardrobe.dims.doorWidth} mm
+                            </Typography>
+                        </Stack>
                     </Stack>
                 ))
             }
-        </Box>
+        </Stack>
     );
 };
 

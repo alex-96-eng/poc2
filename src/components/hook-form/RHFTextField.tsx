@@ -67,6 +67,7 @@ const RHFTextField = forwardRef<HTMLDivElement, Props>(({
                     }}
                     type={type}
                     value={type === "number" && field.value === 0 ? "" : field.value} // FIXME
+                    size="small"
                     {...other}
                 />
             )}

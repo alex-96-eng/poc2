@@ -52,6 +52,7 @@ const RHFDatePicker = ({ label, name, required, slotProps, ...other }: RHFDatePi
                             fullWidth: true,
                             error: !!error,
                             helperText: error?.message,
+                            size: "small",
                             ...slotProps?.textField
                         }
                     }}

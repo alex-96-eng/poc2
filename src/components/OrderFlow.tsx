@@ -1,107 +1,89 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
-import UploadStep from "./UploadStep";
 import DetailedOrderView from "@/views/DetailedOrderView";
 import StartView from "@/views/StartView";
+import { ParsedResponse, ParsedResponseSchema } from "@/types";
+import UploadView from "@/views/UploadView";
 
-type Step = 0 | 1 | 2 | 3;
+type Step = 0 | 1 | 2;
 
 export default function OrderFlow() {
     const [step, setStep] = useState<Step>(0);
 
-    // Holds the Delivery PDF file once uploaded
-    const [deliveryFile, setDeliveryFile] = useState<File | null>(null);
-    // Holds the Supplier PDF file once uploaded
-    const [supplierFile, setSupplierFile] = useState<File | null>(null);
+    const [files, setFiles] = useState<{ deliveryFile: File | null, supplierFile: File | null }>({
+        deliveryFile: null,
+        supplierFile: null
+    });
 
     // Once the backend returns parsed JSON, we store it here
-    const [parsedData, setParsedData] = useState<any>(null);
+    const [parsedData, setParsedData] = useState<ParsedResponse | null>(null);
 
     // Step 0 → Step 1: “Start New Order”
     const handleStart = useCallback(() => {
         setStep(1);
     }, []);
 
-    // Called by <UploadStep> when Delivery PDF is chosen
-    const handleDeliveryUploaded = useCallback((file: File) => {
-        setDeliveryFile(file);
-        setStep(2);
-    }, []);
-
-    // Called by <UploadStep> when Supplier PDF is chosen
-    const handleSupplierUploaded = useCallback((file: File) => {
-        setSupplierFile(file);
-        // Don’t POST here—wait for useEffect to see that both files are set
+    const handleUpload = useCallback(({ deliveryFile, supplierFile }: { deliveryFile: File, supplierFile: File }) => {
+        setFiles({ deliveryFile, supplierFile });
     }, []);
 
     // Whenever both deliveryFile and supplierFile are non-null, POST them together
     useEffect(() => {
-        if (deliveryFile && supplierFile) {
-            const uploadBoth = async () => {
-                const formData = new FormData();
-                formData.append("files", deliveryFile, deliveryFile.name);
-                formData.append("files", supplierFile, supplierFile.name);
-                // try {
-                //   const res = await fetch("http://0.0.0.0:8000/api/v1/pdf/", {
-                //     method: "POST",
-                //     body: formData,
-                //   });
-                //   if (!res.ok) {
-                //     throw new Error(`Server returned ${res.status}`);
-                //   }
-                //   const json = await res.json();
-                //   setParsedData(json);
-                //   setStep(3);
-                // } catch (err) {
-                //   console.error("Failed to parse PDFs:", err);
-                //   // Optionally: reset to step 2 or show an error to the user
-                // }
-                try {
-                    // → Instead of "http://0.0.0.0:8000/api/v1/pdf/", use the public/mocks path:
-                    const res = await fetch("/mocks/orderData.json");
-                    if (!res.ok) {
-                        throw new Error(`Failed to load mock: ${res.status}`);
-                    }
-                    const json = await res.json();
-                    setParsedData(json);
-                    setStep(3);
-                } catch (err) {
-                    console.error("Failed to load mock JSON:", err);
-                    // Optional: set an error state or roll back to a previous step
+        const uploadBoth = async (deliveryFile: File, supplierFile: File) => {
+            const formData = new FormData();
+            formData.append("files", deliveryFile, deliveryFile.name);
+            formData.append("files", supplierFile, supplierFile.name);
+            // try {
+            //   const res = await fetch("http://0.0.0.0:8000/api/v1/pdf/", {
+            //     method: "POST",
+            //     body: formData,
+            //   });
+            //   if (!res.ok) {
+            //     throw new Error(`Server returned ${res.status}`);
+            //   }
+            //   const json = await res.json();
+            //   setParsedData(json);
+            //   setStep(3);
+            // } catch (err) {
+            //   console.error("Failed to parse PDFs:", err);
+            //   // Optionally: reset to step 2 or show an error to the user
+            // }
+            try {
+                // → Instead of "http://0.0.0.0:8000/api/v1/pdf/", use the public/mocks path:
+                const res = await fetch("/mocks/orderData.json");
+                if (!res.ok) {
+                    throw new Error(`Failed to load mock: ${res.status}`);
                 }
-            };
-            uploadBoth();
+                const json = await res.json();
+                setParsedData(json);
+                setStep(2);
+            } catch (err) {
+                console.error("Failed to load mock JSON:", err);
+                // Optional: set an error state or roll back to a previous step
+            }
+        };
+
+        if (!!files.deliveryFile && !!files.supplierFile) {
+            uploadBoth(files.deliveryFile, files.supplierFile);
         }
-    }, [deliveryFile, supplierFile]);
+    }, [files]);
 
     switch (step) {
         case 0:
             return (
                 <StartView handleStart={handleStart}/>
             );
-
         case 1:
             return (
-                <UploadStep
-                    label="Upload Delivery PDF"
-                    onUploaded={handleDeliveryUploaded}
-                />
+                <UploadView handleUpload={handleUpload}/>
             );
-
         case 2:
-            return (
-                <UploadStep
-                    label="Upload Supplier PDF"
-                    onUploaded={handleSupplierUploaded}
-                />
-            );
-
-        case 3:
             return parsedData
-                ?
-                <DetailedOrderView initialData={parsedData}/>
+                ? <DetailedOrderView
+                    initialData={ParsedResponseSchema.parse(parsedData)}
+                />
                 : (
                     <Box p={4}>
                         <Typography color="error">
@@ -109,7 +91,6 @@ export default function OrderFlow() {
                         </Typography>
                     </Box>
                 );
-
         default:
             return null;
     }

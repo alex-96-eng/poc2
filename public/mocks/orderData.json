@@ -1,7 +1,7 @@
 {
   "deliveryInfo": {
     "orderNumber": "MSW-16997",
-    "dateOrdered": "31/03/2025",
+    "dateOrdered": "2025-03-31",
     "numberOfWardrobes": "3",
     "customerName": "Miss Nicola Wilson",
     "addressLine1": "13 Scholar Place",
@@ -12,7 +12,7 @@
   },
   "supplierHeader": {
     "orderNumber": "MSW-16997",
-    "dateOrdered": "31/03/2025",
+    "dateOrdered": "2025-03-31",
     "numberOfWardrobes": "3",
     "netGoods": "£XXX.XX",
     "netDelivery": "£XX.XX",

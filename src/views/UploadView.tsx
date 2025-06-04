@@ -1,105 +1,240 @@
 "use client";
 
-import React, { ChangeEvent, DragEvent, useCallback, useRef, useState, } from "react";
+import React from "react";
+import { DeleteOutlineOutlined, FileUploadOutlined, InsertDriveFileOutlined, UploadFile } from "@mui/icons-material";
+import {
+    alpha,
+    Box,
+    Button,
+    Card,
+    CardContent,
+    CardHeader,
+    IconButton,
+    List,
+    ListItem,
+    ListItemAvatar,
+    ListItemIcon,
+    ListItemText,
+    Stack,
+    Tooltip,
+    Typography
+} from "@mui/material";
+import { useDropzone } from "react-dropzone";
 
-import { UploadFile } from "@mui/icons-material";
-import { CardHeader, Stack } from "@mui/material";
-import Viewer from "@/components/Viewer";
+interface UploadViewProps {
+    handleUpload: ({ deliveryFile, supplierFile }: { deliveryFile: File, supplierFile: File }) => void;
+}
 
-export default function UploadView() {
-    // 1) All hooks at the top, unconditionally:
-    const [isDragging, setIsDragging] = useState(false);
-    const [fileUploaded, setFileUploaded] = useState(false);
-    const inputRef = useRef<HTMLInputElement>(null);
+const UploadView = ({ handleUpload }: UploadViewProps) => {
+    // Delivery File
+    const {
+        acceptedFiles: deliveryAcceptedFiles,
+        getRootProps: getDeliveryRootProps,
+        getInputProps: getDeliveryInputProps
+    } = useDropzone({
+        accept: {
+            "application/pdf": [".pdf"]
+        }
+    });
 
-    // 2) Handlers—also hooks (useCallback) called before any return:
-    const onInputChange = useCallback(
-        (e: ChangeEvent<HTMLInputElement>) => {
-            const file = e.target.files?.[0];
-            if (file) {
-                console.log("Selected file:", file);
-                setFileUploaded(true);
-            }
-        },
-        []
-    );
+    // Supplier File
+    const {
+        acceptedFiles: supplierAcceptedFiles,
+        getRootProps: getSupplierRootProps,
+        getInputProps: getSupplierInputProps
+    } = useDropzone({
+        accept: {
+            "application/pdf": [".pdf"]
+        }
+    });
 
-    const onDrop = useCallback(
-        (e: DragEvent<HTMLDivElement>) => {
-            e.preventDefault();
-            setIsDragging(false);
-            const file = e.dataTransfer.files?.[0];
-            if (file) {
-                console.log("Dropped file:", file);
-                setFileUploaded(true);
-            }
-        },
-        []
-    );
-
-    const onDragOver = useCallback((e: DragEvent<HTMLDivElement>) => {
-        e.preventDefault();
-        setIsDragging(true);
-    }, []);
-
-    const onDragLeave = useCallback(() => {
-        setIsDragging(false);
-    }, []);
-
-    const triggerInput = () => {
-        inputRef.current?.click();
+    const handleClickUpload = () => {
+        handleUpload({ deliveryFile: deliveryAcceptedFiles[0], supplierFile: supplierAcceptedFiles[0] });
     };
 
-    // 3) Only after all hooks do we conditionally render <Viewer />:
-    if (fileUploaded) {
-        return <Viewer/>;
-    }
+    const isUploadDisabled = !supplierAcceptedFiles.length || !deliveryAcceptedFiles.length;
 
-    // 4) Otherwise, render the upload UI:
     return (
         <Stack
+            spacing={4}
             justifyContent="center"
-            alignItems="center"
-            sx={{ flexGrow: 1, px: 2 }}
+            sx={{
+                flexGrow: 1,
+                height: "100vh", // full viewport height
+            }}
         >
-            <CardHeader
-                title="Upload File"
-                subheader="Drag & drop your PDF, or click to browse"
-            />
+            <Box>
+                <CardHeader title="Upload Delivery PDF" subheader="Please upload the delivery PDF"/>
+                {
+                    deliveryAcceptedFiles.length
+                        ? (
+                            <Card>
+                                <List>
+                                    {
+                                        deliveryAcceptedFiles.map(file => (
+                                            <ListItem key={file.path}>
+                                                <ListItemAvatar sx={{ minWidth: 0, pr: 1 }}>
+                                                    <Stack
+                                                        alignItems="center"
+                                                        justifyContent="center"
+                                                        sx={(theme) => ({
+                                                            backgroundColor: alpha(theme.palette.primary.main, 0.16),
+                                                            borderRadius: `${theme.shape.borderRadius}px`,
+                                                            p: 1.5,
+                                                            aspectRatio: "1/1"
+                                                        })}
+                                                    >
+                                                        <InsertDriveFileOutlined sx={{ color: "primary.main" }}/>
+                                                    </Stack>
 
-            <div
-                className={`
-          flex flex-col items-center justify-center
-          w-full max-w-md h-64
-          px-6 py-8
-          border-2 border-dashed rounded-lg
-          transition-colors
-          ${isDragging ? "border-blue-400 bg-blue-50" : "border-gray-300 bg-white"}
-        `}
-                onDrop={onDrop}
-                onDragOver={onDragOver}
-                onDragLeave={onDragLeave}
-                onClick={triggerInput}
+                                                </ListItemAvatar>
+                                                <ListItemText
+                                                    primary={file.name}
+                                                    // secondary={attachment.size ? formatData(attachment.size) : null}
+                                                    secondary={`${file.size.toFixed()} bytes`}
+                                                    slotProps={{
+                                                        primary: {
+                                                            variant: "body2",
+                                                            className: "truncate"
+                                                        }
+                                                    }}
+                                                />
+                                                <ListItemIcon>
+                                                    <Tooltip title="Remove">
+                                                        <IconButton
+                                                            // onClick={onClickPreview}
+                                                        >
+                                                            <DeleteOutlineOutlined/>
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                </ListItemIcon>
+                                            </ListItem>
+                                        ))
+                                    }
+                                </List>
+                            </Card>
+                        )
+                        : (
+                            <Card
+                                sx={{
+                                    borderStyle: "dashed",
+                                    cursor: "pointer",
+                                    "&:hover": {
+                                        backgroundColor: "action.hover",
+                                    },
+                                }}
+                                {...getDeliveryRootProps({ className: "dropzone" })}
+                            >
+                                <CardContent sx={{ p: 3 }}>
+                                    <Stack
+                                        spacing={1}
+                                        justifyContent="center"
+                                        alignItems="center"
+                                    >
+                                        <input {...getDeliveryInputProps()} />
+                                        <UploadFile fontSize="large" sx={{ color: "text.secondary" }}/>
+                                        <Typography>Drag 'n' drop your file here, or click to select file</Typography>
+                                        <Typography variant="caption" color="text.secondary">
+                                            (PDF only)
+                                        </Typography>
+                                    </Stack>
+                                </CardContent>
+                            </Card>
+                        )
+                }
+            </Box>
+
+            <Box sx={{ pb: 4 }}>
+                <CardHeader title="Upload Supplier PDF" subheader="Please upload the supplier PDF"/>
+                {
+                    supplierAcceptedFiles.length
+                        ? (
+                            <Card>
+                                <List>
+                                    {
+                                        supplierAcceptedFiles.map(file => (
+                                            <ListItem key={file.path}>
+                                                <ListItemAvatar sx={{ minWidth: 0, pr: 1 }}>
+                                                    <Stack
+                                                        alignItems="center"
+                                                        justifyContent="center"
+                                                        sx={(theme) => ({
+                                                            backgroundColor: alpha(theme.palette.primary.main, 0.16),
+                                                            borderRadius: `${theme.shape.borderRadius}px`,
+                                                            p: 1.5,
+                                                            aspectRatio: "1/1"
+                                                        })}
+                                                    >
+                                                        <InsertDriveFileOutlined sx={{ color: "primary.main" }}/>
+                                                    </Stack>
+
+                                                </ListItemAvatar>
+                                                <ListItemText
+                                                    primary={file.name}
+                                                    // secondary={attachment.size ? formatData(attachment.size) : null}
+                                                    secondary={`${file.size.toFixed()} bytes`}
+                                                    slotProps={{
+                                                        primary: {
+                                                            variant: "body2",
+                                                            className: "truncate"
+                                                        }
+                                                    }}
+                                                />
+                                                <ListItemIcon>
+                                                    <Tooltip title="Remove">
+                                                        <IconButton
+                                                            // onClick={onClickPreview}
+                                                        >
+                                                            <DeleteOutlineOutlined/>
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                </ListItemIcon>
+                                            </ListItem>
+                                        ))
+                                    }
+                                </List>
+                            </Card>
+                        )
+                        : (
+                            <Card
+                                sx={{
+                                    borderStyle: "dashed",
+                                    cursor: "pointer",
+                                    "&:hover": {
+                                        backgroundColor: "action.hover",
+                                    },
+                                }}
+                                {...getSupplierRootProps({ className: "dropzone" })}
+                            >
+                                <CardContent sx={{ p: 3 }}>
+                                    <Stack
+                                        spacing={1}
+                                        justifyContent="center"
+                                        alignItems="center"
+                                    >
+                                        <input {...getSupplierInputProps()} />
+                                        <UploadFile fontSize="large" sx={{ color: "text.secondary" }}/>
+                                        <Typography>Drag 'n' drop your file here, or click to select file</Typography>
+                                        <Typography variant="caption" color="text.secondary">
+                                            (PDF only)
+                                        </Typography>
+                                    </Stack>
+                                </CardContent>
+                            </Card>
+                        )
+                }
+            </Box>
+
+            <Button
+                onClick={handleClickUpload}
+                variant="contained"
+                disabled={isUploadDisabled}
+                startIcon={<FileUploadOutlined/>}
             >
-                <input
-                    ref={inputRef}
-                    type="file"
-                    accept=".pdf"
-                    className="hidden"
-                    onChange={onInputChange}
-                />
-
-                <UploadFile sx={{ fontSize: 40, color: "text.secondary", mb: 1 }}/>
-
-                <p className="text-lg font-medium text-gray-700 text-center">
-                    {isDragging
-                        ? "Release to upload your PDF"
-                        : "Drag & drop your PDF here, or click to browse"}
-                </p>
-                <p className="mt-1 text-sm text-gray-500">
-                    (Accepts only <strong>.pdf</strong>)
-                </p>
-            </div>
+                Upload Files
+            </Button>
         </Stack>
     );
-}
+};
+
+export default UploadView;

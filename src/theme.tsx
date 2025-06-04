@@ -23,12 +23,6 @@ const theme = createTheme({
                 variant: "outlined"
             }
         },
-        MuiTextField: {
-            defaultProps: {
-                fullWidth: true,
-                size: "small"
-            }
-        }
     }
 });
 

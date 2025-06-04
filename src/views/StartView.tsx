@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
 import React from "react";
 
 type StartViewProps = {
@@ -7,9 +7,8 @@ type StartViewProps = {
 
 const StartView = ({ handleStart }: StartViewProps) => {
     return (
-        <Box
-            display="flex"
-            flexDirection="column"
+        <Stack
+            sx={{ height: "100%", width: "100%" }}
             alignItems="center"
             justifyContent="center"
         >
@@ -19,7 +18,7 @@ const StartView = ({ handleStart }: StartViewProps) => {
             <Button variant="contained" onClick={handleStart}>
                 Start
             </Button>
-        </Box>
+        </Stack>
     );
 };
 
