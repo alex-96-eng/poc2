@@ -84,3 +84,41 @@ export const ParsedResponseSchema = z.object({
 });
 
 export type ParsedResponse = z.infer<typeof ParsedResponseSchema>;
+
+export const FrameConfigSchema = z.object({
+  mswColour: z.string(),
+  mswFrameworkType: z.string(),
+  unleashedFrameworkType: z.string(),
+  unleashedColour: z.string(),
+  unleashedTrackPackCode: z.string(),
+});
+
+export type FrameConfig = z.infer<typeof FrameConfigSchema>;
+
+export const PanelConfigSchema = z.object({
+  mswPanel: z.string(),
+  unleashedPanelName: z.string(),
+  priceBand: z.string(),
+  panelCode: z.string(), // some are empty strings
+});
+
+export type PanelConfig = z.infer<typeof PanelConfigSchema>;
+
+export const DoorDesignConfigSchema = z.object({
+  internalCode: z.string(),
+  description: z.string(),
+});
+
+export type DoorDesignConfig = z.infer<typeof DoorDesignConfigSchema>;
+
+export const FrameConfigListSchema = z.array(FrameConfigSchema);
+export const PanelConfigListSchema = z.array(PanelConfigSchema);
+export const DoorDesignConfigListSchema = z.array(DoorDesignConfigSchema);
+
+export const UnleashedLineItemSchema = z.object({
+  code: z.string(),
+  qty: z.union([z.number(), z.string()]),
+  comment: z.string()
+});
+
+export type UnleashedLineItem = z.infer<typeof UnleashedLineItemSchema>;

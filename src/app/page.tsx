@@ -11,7 +11,8 @@ import CompleteView from "@/views/CompleteView";
 export default function Page() {
     const steps = [
         "Upload Files",
-        "Confirm Details",
+        "Confirm Order Details",
+        // "Confirm Mappings",
         "Review",
         "Done"
     ];
