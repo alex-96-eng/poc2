@@ -1,56 +1,49 @@
+"use client";
+
 import FormProvider from "@/components/hook-form/FormProvider";
 import { useForm } from "react-hook-form";
 import { ParsedResponse, ParsedResponseSchema } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ConfirmDetailsView from "@/views/ConfirmDetailsView";
+import ConfirmMappingsView from "@/views/ConfirmMappingsView";
 import ReviewView from "@/views/ReviewView";
 
-type DetailedOrderViewProps = {
-    initialData: ParsedResponse;
-    activeStep: number;
-    setActiveStep: (step: number) => void;
-}
+type Props = {
+  initialData: ParsedResponse;
+  activeStep: number;
+  setActiveStep: (step: number) => void;
+};
 
-export default function DetailedOrderView({ initialData, activeStep, setActiveStep }: DetailedOrderViewProps) {
-    const methods = useForm<ParsedResponse>({
-        reValidateMode: "onChange",
-        mode: "onChange",
-        defaultValues: initialData,
-        resolver: zodResolver(ParsedResponseSchema)
-    });
+export default function DetailedOrderView({ initialData, activeStep, setActiveStep }: Props) {
+  const methods = useForm<ParsedResponse>({
+    defaultValues: initialData,
+    resolver: zodResolver(ParsedResponseSchema),
+    mode: "onChange",
+  });
 
-    const handleClickReview = methods.handleSubmit(() => {
-        setActiveStep(2);
-    });
-
-    const handleClickEdit = () => {
-        setActiveStep(1);
-    };
-    const handleClickUpload = () => {
-        methods.reset();
-        setActiveStep(3);
-    };
-    const handleClickReset = () => {
-        methods.reset();
-        setActiveStep(0);
-    };
-
-    return (
-        <FormProvider methods={methods} style={{ width: "100%" }}>
-            {
-                activeStep === 1 &&
-                <ConfirmDetailsView
-                    handleReset={handleClickReset}
-                    handleReview={handleClickReview}
-                />
-            }
-            {
-                activeStep === 2 &&
-                <ReviewView
-                    handleEdit={handleClickEdit}
-                    handleUpload={handleClickUpload}
-                />
-            }
-        </FormProvider>
-    );
+  return (
+    <FormProvider methods={methods}>
+      {activeStep === 1 && (
+        <ConfirmDetailsView
+          handleReset={() => {
+            methods.reset();
+            setActiveStep(0);
+          }}
+          handleNext={() => setActiveStep(2)}
+        />
+      )}
+      {activeStep === 2 && (
+        <ConfirmMappingsView
+          handleBack={() => setActiveStep(1)}
+          handleNext={() => setActiveStep(3)}
+        />
+      )}
+      {activeStep === 3 && (
+        <ReviewView
+          handleEdit={() => setActiveStep(1)}
+          handleUpload={() => setActiveStep(4)}
+        />
+      )}
+    </FormProvider>
+  );
 }

@@ -68,22 +68,6 @@ export const AccessorySchema = z.object({
 
 export type Accessory = z.infer<typeof AccessorySchema>;
 
-export const WardrobeSchema = z.object({
-    wardrobeNumber: z.coerce.number(),
-    dims: WardrobeDimsSchema,
-    doorDetails: z.array(DoorDetailSchema),
-    accessories: z.array(AccessorySchema),
-});
-
-export type Wardrobe = z.infer<typeof WardrobeSchema>;
-
-export const ParsedResponseSchema = z.object({
-    deliveryInfo: DeliveryInfoSchema,
-    supplierHeader: SupplierHeaderSchema,
-    wardrobes: z.array(WardrobeSchema)
-});
-
-export type ParsedResponse = z.infer<typeof ParsedResponseSchema>;
 
 export const FrameConfigSchema = z.object({
   mswColour: z.string(),
@@ -122,3 +106,21 @@ export const UnleashedLineItemSchema = z.object({
 });
 
 export type UnleashedLineItem = z.infer<typeof UnleashedLineItemSchema>;
+
+export const WardrobeSchema = z.object({
+  wardrobeNumber: z.coerce.number(),
+  dims: WardrobeDimsSchema,
+  doorDetails: z.array(DoorDetailSchema),
+  accessories: z.array(AccessorySchema),
+  lineItems: z.array(UnleashedLineItemSchema).optional(),
+});
+
+export type Wardrobe = z.infer<typeof WardrobeSchema>;
+
+export const ParsedResponseSchema = z.object({
+    deliveryInfo: DeliveryInfoSchema,
+    supplierHeader: SupplierHeaderSchema,
+    wardrobes: z.array(WardrobeSchema)
+});
+
+export type ParsedResponse = z.infer<typeof ParsedResponseSchema>;

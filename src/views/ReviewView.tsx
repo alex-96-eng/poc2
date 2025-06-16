@@ -2,7 +2,7 @@
 
 import React from "react";
 import Button from "@mui/material/Button";
-import { Card, CardContent, CardHeader, Grid, Stack } from "@mui/material";
+import {Box, Card, CardContent, CardHeader, Chip, Grid, Stack} from "@mui/material";
 import { useFormContext } from "react-hook-form";
 import { ParsedResponse } from "@/types";
 import Divider from "@mui/material/Divider";
@@ -258,20 +258,31 @@ const ReviewView = ({ handleEdit, handleUpload }: ReviewViewProps) => {
                                             </Grid>
                                         </Stack>
 
-                                        <Stack>
-                                            <Typography variant="subtitle1" sx={{ pb: 1, color: "text.secondary" }}>
-                                                Accessories
-                                            </Typography>
-                                            <Grid container spacing={2}>
-                                                {
-                                                    wardrobes[wIdx].accessories.map((accessory, aIdx) => (
-                                                        <Grid key={aIdx} size={6}>
-                                                            <AccessoryCard accessory={accessory}/>
-                                                        </Grid>
-                                                    ))
-                                                }
-                                            </Grid>
-                                        </Stack>
+                                        <Stack spacing={2}>
+  <Typography
+    variant="subtitle1"
+    sx={{ pb: 1, color: "text.secondary" }}
+  >
+    Accessories
+  </Typography>
+
+  <Stack direction="row" spacing={2} flexWrap="wrap">
+    {wardrobes[wIdx].accessories.map((accessory, aIdx) => (
+      <Box key={aIdx} sx={{ width: "50%" }}>
+        <AccessoryCard accessory={accessory} />
+      </Box>
+    ))}
+  </Stack>
+
+  <Typography variant="subtitle1" sx={{ pt: 2, color: "text.secondary" }}>
+    Mapped Line Item Codes
+  </Typography>
+  <Stack direction="row" spacing={1} flexWrap="wrap">
+    {w.lineItems?.map((item, idx) => (
+      <Chip key={idx} label={item.code} size="small" />
+    ))}
+  </Stack>
+</Stack>
 
                                     </Stack>
                                 </CardContent>

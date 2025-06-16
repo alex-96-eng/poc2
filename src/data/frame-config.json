@@ -1,0 +1,44 @@
+[
+  {
+    "mswColour": "Gun Metal",
+    "mswFrameworkType": "S200",
+    "unleashedFrameworkType": "S200",
+    "unleashedColour": "Graphite",
+    "unleashedTrackPackCode": "DRS-S2-TP38-GR"
+  },
+  {
+    "mswColour": "Bright White",
+    "mswFrameworkType": "S200",
+    "unleashedFrameworkType": "S200",
+    "unleashedColour": "White",
+    "unleashedTrackPackCode": "DRS-S2-TP38-WH"
+  },
+  {
+    "mswColour": "Jet Black",
+    "mswFrameworkType": "S200",
+    "unleashedFrameworkType": "S200",
+    "unleashedColour": "Black",
+    "unleashedTrackPackCode": "DRS-S2-TP38-BL"
+  },
+  {
+    "mswColour": "Medium Oak",
+    "mswFrameworkType": "S200",
+    "unleashedFrameworkType": "S200",
+    "unleashedColour": "Oak",
+    "unleashedTrackPackCode": "DRS-S2-TP38-LO"
+  },
+  {
+    "mswColour": "Stone",
+    "mswFrameworkType": "S200",
+    "unleashedFrameworkType": "S200",
+    "unleashedColour": "Stone Grey",
+    "unleashedTrackPackCode": "DRS-S2-TP38-SG"
+  },
+  {
+    "mswColour": "Satin Silver",
+    "mswFrameworkType": "S200",
+    "unleashedFrameworkType": "S200",
+    "unleashedColour": "Silver",
+    "unleashedTrackPackCode": "DRS-S2-TP38-SI"
+  }
+]
