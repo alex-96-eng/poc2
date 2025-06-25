@@ -89,3 +89,8 @@ describe("mapSalesOrderRequest", () => {
     expect(resultDate.toDateString()).toBe(expectedDate.toDateString());
   });
 });
+
+
+
+// # big tstrong goes in line comment
+// # if all doors are the same group the door

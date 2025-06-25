@@ -15,56 +15,38 @@ const DeliveryInformationForm = () => {
                 <Grid spacing={2} container>
                     <Grid size={6}>
                         <RHFTextField
-                            label="Order Number"
-                            name="deliveryInfo.orderNumber"
-                        />
-                    </Grid>
-                    <Grid size={6}>
-                        <RHFDatePicker
-                            label="Date Ordered"
-                            name="deliveryInfo.dateOrdered"
-                        />
-                    </Grid>
-                    <Grid size={6}>
-                        <RHFTextField
-                            label="No. of Wardrobes"
-                            name="deliveryInfo.numberOfWardrobes"
-                        />
-                    </Grid>
-                    <Grid size={6}>
-                        <RHFTextField
                             label="Customer Name"
-                            name="deliveryInfo.customerName"
+                            name="delivery.customerName"
                         />
                     </Grid>
                     <Grid size={6}>
                         <RHFTextField
                             label="Phone"
-                            name="deliveryInfo.customerPhone"
+                            name="delivery.customerPhone"
                         />
                     </Grid>
                     <Grid size={6}>
                         <RHFTextField
                             label="Address Line 1"
-                            name="deliveryInfo.addressLine1"
+                            name="delivery.addressLine1"
                         />
                     </Grid>
                     <Grid size={6}>
                         <RHFTextField
                             label="Address Line 2"
-                            name="deliveryInfo.addressLine2"
+                            name="delivery.addressLine2"
                         />
                     </Grid>
                     <Grid size={6}>
                         <RHFTextField
                             label="Address Line 3"
-                            name="deliveryInfo.addressLine3"
+                            name="delivery.addressLine3"
                         />
                     </Grid>
                     <Grid size={12}>
                         <RHFTextField
                             label="Delivery Notes"
-                            name="deliveryInfo.deliveryNotes"
+                            name="delivery.deliveryNotes"
                             multiline
                             minRows={3}
                         />

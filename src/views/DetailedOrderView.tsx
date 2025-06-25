@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import ConfirmDetailsView from "@/views/ConfirmDetailsView";
 import ConfirmMappingsView from "@/views/ConfirmMappingsView";
 import ReviewView from "@/views/ReviewView";
+import {mapSalesOrderRequest} from "@/utils/mapping/salesOrderMapper";
 
 type Props = {
   initialData: ParsedResponse;
@@ -20,6 +21,29 @@ export default function DetailedOrderView({ initialData, activeStep, setActiveSt
     resolver: zodResolver(ParsedResponseSchema),
     mode: "onChange",
   });
+
+  const handleUploadToBackend = async () => {
+    const parsed = methods.getValues();
+    const payload = mapSalesOrderRequest(parsed);
+
+    try {
+      const res = await fetch("http://0.0.0.0:8000/api/v1/sales-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      console.log(payload)
+      if (!res.ok) {
+        const text = await res.text();
+        console.log(text)
+      }
+
+      setActiveStep(4); // success
+    } catch (err) {
+      console.error("Upload failed:", err);
+      alert("Upload failed: " + (err as Error).message);
+    }
+  };
 
   return (
     <FormProvider methods={methods}>
@@ -41,7 +65,7 @@ export default function DetailedOrderView({ initialData, activeStep, setActiveSt
       {activeStep === 3 && (
         <ReviewView
           handleEdit={() => setActiveStep(1)}
-          handleUpload={() => setActiveStep(4)}
+          handleUpload={handleUploadToBackend}
         />
       )}
     </FormProvider>

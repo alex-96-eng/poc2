@@ -18,33 +18,56 @@ export default function Page() {
   ];
 
   const [activeStep, setActiveStep] = useState(0);
-  const [files, setFiles] = useState<{ deliveryFile: File | null; supplierFile: File | null }>({
-    deliveryFile: null,
-    supplierFile: null,
-  });
   const [parsedData, setParsedData] = useState<ParsedResponse | null>(null);
+  // const [files, setFiles] = useState<{ deliveryFile: File | null; supplierFile: File | null }>({
+  //   deliveryFile: null,
+  //   supplierFile: null,
+  // });
+  // const handleUpload = useCallback(
+  //   ({ deliveryFile, supplierFile }: { deliveryFile: File; supplierFile: File }) => {
+  //     setFiles({ deliveryFile, supplierFile });
+  //   },
+  //   []
+  // );
+  // useEffect(() => {
+  //   if (files.deliveryFile && files.supplierFile) {
+  //     fetch("/mocks/orderData.json")
+  //       .then((res) => res.json())
+  //       .then((json) => {
+  //         setParsedData(json);
+  //         setActiveStep(1); // jump to Confirm Details
+  //       })
+  //       .catch(() => {
+  //         console.error("Failed to load mock JSON");
+  //       });
+  //   }
+  // }, [files]);
+     const handleUpload = useCallback(
+      async ({ deliveryFile, supplierFile }: { deliveryFile: File; supplierFile: File }) => {
+        const formData = new FormData();
+        formData.append("files", deliveryFile);
+        formData.append("files", supplierFile);
+        try {
+          const res = await fetch("http://0.0.0.0:8000/api/v1/pdf", {
+            method: "POST",
+            body: formData,
+          });
 
-  const handleUpload = useCallback(
-    ({ deliveryFile, supplierFile }: { deliveryFile: File; supplierFile: File }) => {
-      setFiles({ deliveryFile, supplierFile });
-    },
-    []
-  );
+          if (!res.ok) {
+            const errorText = await res.text();
+            throw new Error(`Parsing failed: ${errorText}`);
+          }
 
-  useEffect(() => {
-    if (files.deliveryFile && files.supplierFile) {
-      fetch("/mocks/orderData.json")
-        .then((res) => res.json())
-        .then((json) => {
+          const json = await res.json();
           setParsedData(json);
           setActiveStep(1); // jump to Confirm Details
-        })
-        .catch(() => {
-          console.error("Failed to load mock JSON");
-        });
-    }
-  }, [files]);
-
+        } catch (err) {
+          console.error("Upload failed:", err);
+          alert("Upload failed. Please try again.");
+        }
+      },
+      []
+  );
   return (
     <Stack direction="row" sx={{ height: "100vh" }}>
       <Stack

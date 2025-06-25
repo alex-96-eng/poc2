@@ -65,8 +65,12 @@ const UploadView = ({ handleUpload }: UploadViewProps) => {
         setSupplierFile(null);
     };
 
-    const handleClickUpload = () => {
-        handleUpload({ deliveryFile: deliveryAcceptedFiles[0], supplierFile: supplierAcceptedFiles[0] });
+  const handleClickUpload = () => {
+      if (deliveryFile && supplierFile) {
+        handleUpload({ deliveryFile, supplierFile });
+      } else {
+        console.warn("Missing files:", { deliveryFile, supplierFile });
+      }
     };
 
     const isUploadDisabled = !supplierAcceptedFiles.length || !deliveryAcceptedFiles.length;

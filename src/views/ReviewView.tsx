@@ -22,7 +22,7 @@ const ReviewView = ({ handleEdit, handleUpload }: ReviewViewProps) => {
     const methods = useFormContext<ParsedResponse>();
     const wardrobes = methods.watch("wardrobes");
     const supplierHeader = methods.watch("supplierHeader");
-    const deliveryInfo = methods.watch("deliveryInfo");
+    const deliveryInfo = methods.watch("delivery");
 
     const handleClickEdit = () => {
         handleEdit();
@@ -128,24 +128,6 @@ const ReviewView = ({ handleEdit, handleUpload }: ReviewViewProps) => {
                         <CardHeader title="Delivery Information"/>
                         <CardContent>
                             <Grid container spacing={2}>
-                                <Grid size={6}>
-                                    <DescriptionItem
-                                        label="Order Number"
-                                        value={deliveryInfo.orderNumber}
-                                    />
-                                </Grid>
-                                <Grid size={6}>
-                                    <DescriptionItem
-                                        label="Date Ordered"
-                                        value={formatDate(deliveryInfo.dateOrdered)}
-                                    />
-                                </Grid>
-                                <Grid size={6}>
-                                    <DescriptionItem
-                                        label="No. of Wardrobes"
-                                        value={deliveryInfo.numberOfWardrobes}
-                                    />
-                                </Grid>
                                 <Grid size={6}>
                                     <DescriptionItem
                                         label="Customer Name"

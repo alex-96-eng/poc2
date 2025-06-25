@@ -1,33 +1,34 @@
 import { ParsedResponse } from "@/types";
+import { mapWardrobeToUnleashedItems } from "./wardrobeMapper";
 
 export function mapSalesOrderRequest(parsed: ParsedResponse) {
-  const requiredDate = new Date();
+
+  const requiredDate = new Date(); // todo;
   requiredDate.setDate(requiredDate.getDate() + 7);
 
+  const Lines = parsed.wardrobes.flatMap(wardrobe => {
+    const items = wardrobe.lineItems ?? mapWardrobeToUnleashedItems(wardrobe as any);
+    return items
+      .filter(item => item.code && item.code.trim() !== "")
+      .map(item => ({
+        ProductCode: item.code,
+        OrderQuantity:
+          typeof item.qty === "string" ? parseInt(item.qty, 10) : item.qty,
+        Comment: item.comment || undefined
+      }));
+  });
+
   return {
-    CustomerReference: parsed.deliveryInfo.orderNumber ?? "",
+    CustomerReference: "CU0001",
     RequiredDate: requiredDate.toISOString(),
     Delivery: {
-      Name: parsed.deliveryInfo.customerName,
-      AddressLine1: parsed.deliveryInfo.addressLine1,
-      City: parsed.deliveryInfo.addressLine2 || "London",
-      Postcode: parsed.deliveryInfo.addressLine3 || "N/A",
-      Instructions: parsed.deliveryInfo.deliveryNotes ?? "",
+      Name: parsed.delivery.customerName,
+      AddressLine1: parsed.delivery.addressLine1,
+      City: parsed.delivery.addressLine2 || "",
+      Postcode: parsed.delivery.addressLine3 || "",
+      Instructions: parsed.delivery.deliveryNotes || ""
     },
-    // Lines: parsed.wardrobes.flatMap(w =>
-    //   (w.lineItems ?? []).filter(i => i.code).map(item => ({
-    //     ProductCode: item.code,
-    //     OrderQuantity: 1,
-    //     Comment: item.comment ?? null
-    //   }))
-    // ),
-    Lines: [
-        {
-          ProductCode: "MFC-LINER-2451 DE",
-          OrderQuantity: 1,
-          Comment: "Placeholder until mapping is complete"
-      }
-    ],
-    Comments: `Auto-uploaded from PDF Parser Order #${parsed.deliveryInfo.orderNumber}`
+    Lines,
+    Comments: `Auto-uploaded from PDF Parser Order`
   };
 }

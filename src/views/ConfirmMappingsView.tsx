@@ -1,5 +1,3 @@
-// src/components/ConfirmMappingsView.tsx
-
 "use client";
 
 import React, { useEffect } from "react";
@@ -18,6 +16,8 @@ export default function ConfirmMappingsView({ handleBack, handleNext }: Props) {
   const { getValues, setValue } = useFormContext<ParsedResponse>();
   const wardrobes = getValues("wardrobes");
 
+  console.log(wardrobes);
+
   // Populate lineItems once, using embedded config mappings
   useEffect(() => {
     wardrobes.forEach((wardrobe: Wardrobe, i: number) => {
@@ -27,7 +27,7 @@ export default function ConfirmMappingsView({ handleBack, handleNext }: Props) {
         setValue(path, items);
       }
     });
-  }, []); // run once on mount
+  }, []);
 
   return (
     <Stack spacing={4}>
