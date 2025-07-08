@@ -1,14 +1,27 @@
 import { ParsedResponse } from "@/types";
 import { mapWardrobeToUnleashedItems } from "./wardrobeMapper";
+import { mapAccessoriesToUnleashedItems } from "./accessoryMapper";
 
 export function mapSalesOrderRequest(parsed: ParsedResponse) {
-
-  const requiredDate = new Date(); // todo;
+  const requiredDate = new Date();
   requiredDate.setDate(requiredDate.getDate() + 7);
 
   const Lines = parsed.wardrobes.flatMap(wardrobe => {
-    const items = wardrobe.lineItems ?? mapWardrobeToUnleashedItems(wardrobe as any);
-    return items
+    const wardrobeItems = wardrobe.lineItems ?? mapWardrobeToUnleashedItems(wardrobe);
+
+    const inferredPanel =
+      wardrobe.doorDetails.find(d => d.doorPanel)?.doorPanel ??
+      wardrobe.dims.frameworkColour;
+
+    let accessoryItems: any[] = [];
+    try {
+      accessoryItems = mapAccessoriesToUnleashedItems(wardrobe.accessories, inferredPanel);
+      console.log(`Wardrobe #${wardrobe.wardrobeNumber} accessory items:`, accessoryItems);
+    } catch (err) {
+      console.warn(`Accessory mapping failed for wardrobe #${wardrobe.wardrobeNumber}: ${err}`);
+    }
+
+    return [...wardrobeItems, ...accessoryItems]
       .filter(item => item.code && item.code.trim() !== "")
       .map(item => ({
         ProductCode: item.code,
@@ -19,7 +32,7 @@ export function mapSalesOrderRequest(parsed: ParsedResponse) {
   });
 
   return {
-    CustomerReference: "CU0001",
+    CustomerReference: "CMS001",
     RequiredDate: requiredDate.toISOString(),
     Delivery: {
       Name: parsed.delivery.customerName,
@@ -29,6 +42,6 @@ export function mapSalesOrderRequest(parsed: ParsedResponse) {
       Instructions: parsed.delivery.deliveryNotes || ""
     },
     Lines,
-    Comments: `Auto-uploaded from PDF Parser Order`
+    Comments: `Auto-uploaded from PDF Parser`
   };
 }

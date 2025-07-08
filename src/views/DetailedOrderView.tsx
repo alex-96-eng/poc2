@@ -25,7 +25,6 @@ export default function DetailedOrderView({ initialData, activeStep, setActiveSt
   const handleUploadToBackend = async () => {
     const parsed = methods.getValues();
     const payload = mapSalesOrderRequest(parsed);
-
     try {
       const res = await fetch("http://0.0.0.0:8000/api/v1/sales-order", {
         method: "POST",

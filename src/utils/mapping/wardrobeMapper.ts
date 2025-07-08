@@ -8,9 +8,20 @@ const frameConfigs: FrameConfig[] = frameConfig;
 const panelConfigs: PanelConfig[] = panelConfig;
 const doorConfigs: DoorConfig[] = doorConfig;
 
-// Normalize panel name by stripping parentheses
+// Normalize panel name by stripping parentheses, commas, and converting to Title Case
 function normalizePanelName(panel: string): string {
-  return panel.split("(")[0].trim();
+  // Remove any parenthesized groups and trailing commas
+  const stripped = panel
+    .replace(/\s*\([^)]*\)/g, "")
+    .replace(/,\s*$/g, "")
+    .trim();
+
+  // Convert to Title Case
+  return stripped
+    .toLowerCase()
+    .split(" ")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 }
 
 // Lookup frame config by MSW colour & type
@@ -19,7 +30,9 @@ function getFrameConfig(colour: string, type: string): FrameConfig {
     c => c.mswColour === colour && c.mswFrameworkType === type
   );
   if (!match) {
-    const options = frameConfigs.map(c => `${c.mswColour} (${c.mswFrameworkType})`).join("\n");
+    const options = frameConfigs.map(
+      c => `${c.mswColour} (${c.mswFrameworkType})`
+    ).join("\n");
     throw new Error(`Frame config not found for ${colour} (${type}). Options:\n${options}`);
   }
   return match;
@@ -29,7 +42,10 @@ function getFrameConfig(colour: string, type: string): FrameConfig {
 function getPanelConfig(rawPanel: string): PanelConfig {
   const name = normalizePanelName(rawPanel);
   const match = panelConfigs.find(c => c.mswPanel === name);
-  if (!match) throw new Error(`Panel config not found for ${name}`);
+  if (!match) {
+    const available = panelConfigs.map(c => c.mswPanel).join(", ");
+    throw new Error(`Panel config not found for '${name}'. Available: ${available}`);
+  }
   return match;
 }
 

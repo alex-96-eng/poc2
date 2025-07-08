@@ -1,6 +1,8 @@
 import { z } from "zod";
 
-// Matches Customer Delivery Ticket (MSW-16952)
+// -----------------------------
+// Delivery & Supplier Header
+// -----------------------------
 export const DeliverySchema = z.object({
   customerName: z.string(),
   addressLine1: z.string(),
@@ -11,7 +13,6 @@ export const DeliverySchema = z.object({
 });
 export type Delivery = z.infer<typeof DeliverySchema>;
 
-// Matches Supplier PO Header (MSW-16896)
 export enum SupplierAdminChargeType {
   Yes = "Yes",
   No = "No"
@@ -35,7 +36,9 @@ export const SupplierHeaderSchema = z.object({
 });
 export type SupplierHeader = z.infer<typeof SupplierHeaderSchema>;
 
-// Wardrobe & Component Schemas
+// -----------------------------
+// Wardrobe & Components
+// -----------------------------
 export const WardrobeDimsSchema = z.object({
   slidingOpeningWidth: z.coerce.number(),
   slidingOpeningHeight: z.coerce.number(),
@@ -80,7 +83,9 @@ export const WardrobeSchema = z.object({
 });
 export type Wardrobe = z.infer<typeof WardrobeSchema>;
 
-// Mapping Configs (unchanged)
+// -----------------------------
+// Mapping Configs (Flat/Legacy)
+// -----------------------------
 export const FrameConfigSchema = z.object({
   mswColour: z.string(),
   mswFrameworkType: z.string(),
@@ -104,10 +109,56 @@ export const DoorConfigSchema = z.object({
 });
 export type DoorConfig = z.infer<typeof DoorConfigSchema>;
 
-// Final parsed structure
+// -----------------------------
+// Final parsed wardrobe structure
+// -----------------------------
 export const ParsedResponseSchema = z.object({
   delivery: DeliverySchema,
   supplierHeader: SupplierHeaderSchema,
   wardrobes: z.array(WardrobeSchema),
 });
 export type ParsedResponse = z.infer<typeof ParsedResponseSchema>;
+
+// -----------------------------
+// Suffix Config (Record<string, string>)
+// -----------------------------
+export const SuffixConfigSchema = z.record(z.string());
+export type SuffixConfig = z.infer<typeof SuffixConfigSchema>;
+
+// -----------------------------
+// Normalized Configs: Accessories & Extras
+// -----------------------------
+export enum QuantityRule {
+  Match = "MATCH",
+  Multiply = "MULTIPLY",
+  Fixed = "FIXED"
+}
+
+// Accessory entries
+export const AccessoryEntrySchema = z.object({
+  code: z.string(),                 // renamed from prefix
+  quantityRule: z.nativeEnum(QuantityRule),
+  multiplier: z.number().nullable().optional(),
+  fixedQuantity: z.number().nullable().optional(),
+  noSuffix: z.boolean()
+});
+
+export const AccessoryConfigSchema = z.object({
+  componentName: z.string(),
+  entries: z.array(AccessoryEntrySchema)
+});
+export type AccessoryConfig = z.infer<typeof AccessoryConfigSchema>;
+
+// Extras entries (standalone code)
+export const ExtraEntrySchema = z.object({
+  code: z.string(),
+  quantityRule: z.nativeEnum(QuantityRule),
+  multiplier: z.number().nullable().optional(),
+  fixedQuantity: z.number().nullable().optional()
+});
+
+export const ExtrasConfigSchema = z.object({
+  componentName: z.string(),
+  entries: z.array(ExtraEntrySchema)
+});
+export type ExtrasConfig = z.infer<typeof ExtrasConfigSchema>;
