@@ -4,7 +4,7 @@ import { mapSalesOrderRequest } from "@/utils/mapping/salesOrderMapper";
 describe("mapSalesOrderRequest", () => {
   it("maps a ParsedResponse into a valid SalesOrderCreateRequest payload", () => {
     const parsed: ParsedResponse = {
-      deliveryInfo: {
+      delivery: {
         orderNumber: "ORD123",
         dateOrdered: new Date("2025-06-18"),
         numberOfWardrobes: 1,
