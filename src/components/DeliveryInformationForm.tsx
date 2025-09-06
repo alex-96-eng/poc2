@@ -1,6 +1,5 @@
 import { Box, CardContent, CardHeader, Grid } from "@mui/material";
 import RHFTextField from "@/components/hook-form/RHFTextField";
-import RHFDatePicker from "@/components/hook-form/RHFDatePicker";
 
 const DeliveryInformationForm = () => {
     return (

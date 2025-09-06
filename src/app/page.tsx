@@ -19,29 +19,6 @@ export default function Page() {
 
     const [activeStep, setActiveStep] = useState(0);
     const [parsedData, setParsedData] = useState<ParsedResponse | null>(null);
-    // const [files, setFiles] = useState<{ deliveryFile: File | null; supplierFile: File | null }>({
-    //   deliveryFile: null,
-    //   supplierFile: null,
-    // });
-    // const handleUpload = useCallback(
-    //   ({ deliveryFile, supplierFile }: { deliveryFile: File; supplierFile: File }) => {
-    //     setFiles({ deliveryFile, supplierFile });
-    //   },
-    //   []
-    // );
-    // useEffect(() => {
-    //   if (files.deliveryFile && files.supplierFile) {
-    //     fetch("/mocks/orderData.json")
-    //       .then((res) => res.json())
-    //       .then((json) => {
-    //         setParsedData(json);
-    //         setActiveStep(1); // jump to Confirm Details
-    //       })
-    //       .catch(() => {
-    //         console.error("Failed to load mock JSON");
-    //       });
-    //   }
-    // }, [files]);
     const handleUpload = useCallback(
         async ({ deliveryFile, supplierFile }: { deliveryFile: File; supplierFile: File }) => {
             const formData = new FormData();
