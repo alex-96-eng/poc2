@@ -1,13 +1,9 @@
-import { Box, CardContent, CardHeader, Grid } from "@mui/material";
+import { Box, CardContent, Grid } from "@mui/material";
 import RHFTextField from "@/components/hook-form/RHFTextField";
 
 const DeliveryInformationForm = () => {
     return (
         <Box>
-            <CardHeader
-                sx={{ px: 0 }}
-                title="Delivery Information"
-            />
             <CardContent
                 sx={{ px: 0 }}
             >
