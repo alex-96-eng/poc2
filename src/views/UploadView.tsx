@@ -24,9 +24,10 @@ import { formatData } from "@/lib/utils";
 
 interface UploadViewProps {
     handleUpload: ({ deliveryFile, supplierFile }: { deliveryFile: File, supplierFile: File }) => void;
+    isPending: boolean;
 }
 
-const UploadView = ({ handleUpload }: UploadViewProps) => {
+const UploadView = ({ handleUpload, isPending = false }: UploadViewProps) => {
     // Delivery File
     const [deliveryFile, setDeliveryFile] = useState<File | null>(null);
     const {
@@ -65,12 +66,12 @@ const UploadView = ({ handleUpload }: UploadViewProps) => {
         setSupplierFile(null);
     };
 
-  const handleClickUpload = () => {
-      if (deliveryFile && supplierFile) {
-        handleUpload({ deliveryFile, supplierFile });
-      } else {
-        console.warn("Missing files:", { deliveryFile, supplierFile });
-      }
+    const handleClickUpload = () => {
+        if (deliveryFile && supplierFile) {
+            handleUpload({ deliveryFile, supplierFile });
+        } else {
+            console.warn("Missing files:", { deliveryFile, supplierFile });
+        }
     };
 
     const isUploadDisabled = !supplierAcceptedFiles.length || !deliveryAcceptedFiles.length;
@@ -116,7 +117,7 @@ const UploadView = ({ handleUpload }: UploadViewProps) => {
                                         />
                                         <ListItemIcon>
                                             <Tooltip title="Remove">
-                                                <IconButton onClick={handleRemoveDeliveryFile}>
+                                                <IconButton disabled={isPending} onClick={handleRemoveDeliveryFile}>
                                                     <DeleteOutlineOutlined/>
                                                 </IconButton>
                                             </Tooltip>
@@ -190,7 +191,7 @@ const UploadView = ({ handleUpload }: UploadViewProps) => {
                                         />
                                         <ListItemIcon>
                                             <Tooltip title="Remove">
-                                                <IconButton onClick={handleRemoveSupplierFile}>
+                                                <IconButton disabled={isPending} onClick={handleRemoveSupplierFile}>
                                                     <DeleteOutlineOutlined/>
                                                 </IconButton>
                                             </Tooltip>
@@ -230,6 +231,7 @@ const UploadView = ({ handleUpload }: UploadViewProps) => {
             </Box>
 
             <Button
+                loading={isPending}
                 onClick={handleClickUpload}
                 variant="contained"
                 disabled={isUploadDisabled}

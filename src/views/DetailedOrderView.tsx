@@ -10,12 +10,13 @@ import ReviewView from "@/views/ReviewView";
 import { mapSalesOrderRequest } from "@/utils/mapping/salesOrderMapper";
 
 type Props = {
+    handleOpenConfigDrawer: VoidFunction;
     initialData: ParsedResponse;
     activeStep: number;
     setActiveStep: (step: number) => void;
 };
 
-export default function DetailedOrderView({ initialData, activeStep, setActiveStep }: Props) {
+export default function DetailedOrderView({ handleOpenConfigDrawer, initialData, activeStep, setActiveStep }: Props) {
     const methods = useForm<ParsedResponse>({
         defaultValues: initialData,
         resolver: zodResolver(ParsedResponseSchema),
@@ -50,6 +51,7 @@ export default function DetailedOrderView({ initialData, activeStep, setActiveSt
             {
                 activeStep === 1 && (
                     <ConfirmDetailsView
+                        handleOpenConfigDrawer={handleOpenConfigDrawer}
                         handleReset={() => {
                             methods.reset();
                             setActiveStep(0);
