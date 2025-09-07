@@ -1,7 +1,0 @@
-[
-  { "mswDoorType": "Denver",  "code": "" },
-  { "mswDoorType": "Boston",  "code": "DRS-ST-DES-EQ2" },
-  { "mswDoorType": "Chicago", "code": "DRS-ST-DES-EQ3" },
-  { "mswDoorType": "Newark",  "code": "DRS-ST-DES-EQ4" },
-  { "mswDoorType": "Houston", "code": "DRS-ST-DES-EQ5" }
-]

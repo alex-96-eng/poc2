@@ -2,7 +2,17 @@
 
 import React from "react";
 import Button from "@mui/material/Button";
-import { Box, CardHeader, Divider, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  CardHeader,
+  Stack,
+  Divider,
+  Typography,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useFormContext } from "react-hook-form";
 import { CheckOutlined, Close } from "@mui/icons-material";
 import { ParsedResponse } from "@/types";
@@ -26,7 +36,7 @@ export default function ConfirmDetailsView(
         handleReset,
     }: ConfirmDetailsViewProps) {
     const { watch, handleSubmit } = useFormContext<ParsedResponse>();
-    const wardrobes = watch("wardrobes");
+    const wardrobes = watch("wardrobes") || [];
 
     return (
         <Stack spacing={2}>
@@ -56,22 +66,42 @@ export default function ConfirmDetailsView(
                 </Stack>
             </Stack>
 
-            <Divider/>
+      <Divider />
 
-            {/* Forms */}
-            <PurchaseOrderInfoForm/>
-            <Divider/>
-            <DeliveryInformationForm/>
-            <Divider/>
+      {/* Supplier Purchase Order Info (collapsed by default) */}
+      <Accordion defaultExpanded>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography variant="h6">Supplier Purchase Order Info</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <PurchaseOrderInfoForm />
+        </AccordionDetails>
+      </Accordion>
 
-            {/* Wardrobes */}
-            {wardrobes.map((w, wIdx) => (
-                <Box key={wIdx}>
-                    <CardHeader title={`Wardrobe #${w.wardrobeNumber} Details`} sx={{ px: 0 }}/>
-                    <WardrobeVisual wardrobe={w}/>
-                    <WardrobeDetailsForm wardrobe={w} wardrobeIndex={wIdx}/>
-                </Box>
-            ))}
-        </Stack>
-    );
+      {/* Delivery Information (collapsed by default) */}
+      <Accordion>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography variant="h6">Delivery Information</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <DeliveryInformationForm />
+        </AccordionDetails>
+      </Accordion>
+
+      {/* Wardrobes (each collapsed by default) */}
+      {wardrobes.map((w, wIdx) => (
+        <Accordion key={wIdx}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography variant="h6">Wardrobe #{w.wardrobeNumber} Details</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Box>
+              <WardrobeVisual wardrobe={w} />
+              <WardrobeDetailsForm wardrobe={w} wardrobeIndex={wIdx} />
+            </Box>
+          </AccordionDetails>
+        </Accordion>
+      ))}
+    </Stack>
+  );
 }

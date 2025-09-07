@@ -21,14 +21,16 @@ const WardrobeVisual = ({ wardrobe }: WardrobeVisualProps) => {
                                 {door.doorNumber}
                             </Typography>
 
-                            <Typography
-                                variant="caption"
-                                sx={{
-                                    textAlign: "center",
-                                    color: "text.secondary",
-                                }}
+                           <Typography
+                              variant="caption"
+                              sx={{ textAlign: "center", color: "text.secondary" }}
                             >
-                                {door.doorPanel}
+                              {(Array.isArray(door.panels)
+                                ? door.panels.map((p: any) => (typeof p === "string" ? p : p?.name))
+                                : []
+                              )
+                                .filter(Boolean)
+                                .join(" / ") || "—"}
                             </Typography>
                             <Box
                                 sx={{

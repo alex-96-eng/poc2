@@ -1,4 +1,4 @@
-import { Box, CardContent, CardHeader, Grid, MenuItem } from "@mui/material";
+import { Box, CardContent, Grid, MenuItem } from "@mui/material";
 import RHFTextField from "@/components/hook-form/RHFTextField";
 import RHFDatePicker from "./hook-form/RHFDatePicker";
 import RHFSelect from "./hook-form/RHFSelect";
@@ -7,10 +7,6 @@ import { SupplierAdminChargeType } from "@/types";
 const PurchaseOrderInfoForm = () => {
     return (
         <Box>
-            <CardHeader
-                sx={{ px: 0 }}
-                title="Supplier Purchase Order Info"
-            />
             <CardContent sx={{ px: 0 }}>
                 <Grid spacing={2} container>
                     <Grid size={6}>

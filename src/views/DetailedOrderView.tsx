@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import ConfirmDetailsView from "@/views/ConfirmDetailsView";
 import ConfirmMappingsView from "@/views/ConfirmMappingsView";
 import ReviewView from "@/views/ReviewView";
-import { mapSalesOrderRequest } from "@/utils/mapping/salesOrderMapper";
+
 
 type Props = {
     handleOpenConfigDrawer: VoidFunction;
@@ -24,9 +24,7 @@ export default function DetailedOrderView({ handleOpenConfigDrawer, initialData,
     });
 
     const handleUploadToBackend = async () => {
-        const parsed = methods.getValues();
-        const payload = mapSalesOrderRequest(parsed);
-
+        const payload = methods.getValues();
         try {
             const res = await fetch("https://api-sandbox-da41.up.railway.app/api/v1/pdf/map", {
                 method: "POST",
