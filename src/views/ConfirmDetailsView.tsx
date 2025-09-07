@@ -2,16 +2,7 @@
 
 import React from "react";
 import Button from "@mui/material/Button";
-import {
-  Box,
-  CardHeader,
-  Stack,
-  Divider,
-  Typography,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-} from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Box, Divider, Stack, Typography, } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useFormContext } from "react-hook-form";
 import { CheckOutlined, Close } from "@mui/icons-material";
@@ -41,7 +32,7 @@ export default function ConfirmDetailsView(
     return (
         <Stack spacing={2}>
             {/* Header with Next & Reset */}
-            <Stack direction="row" spacing={2} justifyContent="space-between">
+            <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
                 <Typography variant="h4">Confirm Order Details</Typography>
                 <Stack direction="row" alignItems="center" spacing={1}>
                     <Button
@@ -66,42 +57,46 @@ export default function ConfirmDetailsView(
                 </Stack>
             </Stack>
 
-      <Divider />
+            <Divider/>
 
-      {/* Supplier Purchase Order Info (collapsed by default) */}
-      <Accordion defaultExpanded>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography variant="h6">Supplier Purchase Order Info</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <PurchaseOrderInfoForm />
-        </AccordionDetails>
-      </Accordion>
+            <Stack>
 
-      {/* Delivery Information (collapsed by default) */}
-      <Accordion>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography variant="h6">Delivery Information</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <DeliveryInformationForm />
-        </AccordionDetails>
-      </Accordion>
+                {/* Supplier Purchase Order Info (collapsed by default) */}
+                <Accordion defaultExpanded>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+                        <Typography variant="h6">Supplier Purchase Order Info</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <PurchaseOrderInfoForm/>
+                    </AccordionDetails>
+                </Accordion>
 
-      {/* Wardrobes (each collapsed by default) */}
-      {wardrobes.map((w, wIdx) => (
-        <Accordion key={wIdx}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography variant="h6">Wardrobe #{w.wardrobeNumber} Details</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Box>
-              <WardrobeVisual wardrobe={w} />
-              <WardrobeDetailsForm wardrobe={w} wardrobeIndex={wIdx} />
-            </Box>
-          </AccordionDetails>
-        </Accordion>
-      ))}
-    </Stack>
-  );
+                {/* Delivery Information (collapsed by default) */}
+                <Accordion>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+                        <Typography variant="h6">Delivery Information</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <DeliveryInformationForm/>
+                    </AccordionDetails>
+                </Accordion>
+
+                {/* Wardrobes (each collapsed by default) */}
+                {wardrobes.map((w, wIdx) => (
+                    <Accordion key={wIdx}>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+                            <Typography variant="h6">Wardrobe #{w.wardrobeNumber} Details</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Box>
+                                <WardrobeVisual wardrobe={w}/>
+                                <WardrobeDetailsForm wardrobe={w} wardrobeIndex={wIdx}/>
+                            </Box>
+                        </AccordionDetails>
+                    </Accordion>
+                ))}
+
+            </Stack>
+        </Stack>
+    );
 }

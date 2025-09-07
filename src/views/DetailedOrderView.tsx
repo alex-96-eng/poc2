@@ -61,6 +61,7 @@ export default function DetailedOrderView({ handleOpenConfigDrawer, initialData,
             {
                 activeStep === 2 && (
                     <ConfirmMappingsView
+                        handleOpenConfigDrawer={handleOpenConfigDrawer}
                         handleBack={() => setActiveStep(1)}
                         handleNext={() => setActiveStep(3)}
                     />
