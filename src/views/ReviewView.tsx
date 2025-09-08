@@ -52,18 +52,16 @@ const ReviewView = ({ salesOrder, mapping, handleEdit, handleUpload }: ReviewVie
       Delivery: {
         Name: mapping.Delivery?.Name ?? delivery.customerName ?? "",
         AddressLine1: mapping.Delivery?.AddressLine1 ?? delivery.addressLine1 ?? "",
-        City: mapping.Delivery?.City ?? delivery.addressLine2 ?? delivery.addressLine3 ?? "",
-        Postcode: mapping.Delivery?.Postcode ?? delivery.addressLine3 ?? "",
+        City: mapping.Delivery?.City ?? (delivery.addressLine2 || delivery.addressLine3 || ""),
+        Postcode: mapping.Delivery?.Postcode ?? (delivery.addressLine3 || ""),
         Instructions:
-          mapping.Delivery?.Instructions ??
-          delivery.deliveryNotes ??
-          "",
+          (mapping.Delivery?.Instructions ?? delivery.deliveryNotes ?? "").trim(),
       },
-      Lines: mapping.Lines.map((l) => ({
+      Lines: (mapping.Lines || []).map((l) => ({
         ProductCode: l.ProductCode,
         OrderQuantity: Number(l.OrderQuantity),
         Comment: l.Comment ?? "",
-        // UnitPrice intentionally omitted
+        // UnitPrice: ... // only include if your server requires it for a special SKU
       })),
       Comments: null,
     };
