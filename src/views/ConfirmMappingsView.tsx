@@ -1,58 +1,55 @@
 "use client";
 
-import React from "react";
-import { Button, Stack, Typography } from "@mui/material";
-import { useFormContext } from "react-hook-form";
-import { ParsedResponse, Wardrobe } from "@/types";
+import React, { useEffect } from "react";
+import { Stack, Button } from "@mui/material";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import FormProvider from "@/components/hook-form/FormProvider";
 import WardrobeLineItemEditor from "@/components/WardrobeLineItemEditor";
-import { CheckOutlined, ChevronLeft } from "@mui/icons-material";
-import IconButton from "@mui/material/IconButton";
-import GearIcon from "next/dist/client/components/react-dev-overlay/ui/icons/gear-icon";
+import { MappedWardrobe, MappedWardrobeSchema } from "@/types";
 
 type Props = {
-    handleOpenConfigDrawer: VoidFunction;
-    handleBack: () => void;
-    handleNext: () => void;
+  initial: MappedWardrobe;
+  handleBack: () => void;
+  handleNext: () => void;
+  onSave?: (data: MappedWardrobe) => void;
 };
 
-export default function ConfirmMappingsView({ handleOpenConfigDrawer, handleBack, handleNext }: Props) {
-    const { getValues } = useFormContext<ParsedResponse>();
-    const wardrobes = getValues("wardrobes");
-    console.log(wardrobes);
+export default function ConfirmMappingsView({
+  initial,
+  handleBack,
+  handleNext,
+  onSave,
+}: Props) {
+  const methods = useForm<MappedWardrobe>({
+    defaultValues: initial,
+    resolver: zodResolver(MappedWardrobeSchema),
+    mode: "onChange",
+  });
 
-    return (
-        <Stack spacing={4}>
-            <Stack direction="row" alignItems="center" spacing={2} justifyContent="space-between">
-                <Typography variant="h4">Confirm Mappings</Typography>
-                <Stack direction="row" alignItems="center" spacing={1}>
-                    <Button
-                        startIcon={<ChevronLeft/>}
-                        variant="outlined"
-                        onClick={handleBack}
-                    >
-                        Back to Details
-                    </Button>
-                    <Button
-                        startIcon={<CheckOutlined/>}
-                        variant="contained"
-                        onClick={handleNext}
-                    >
-                        Next: Review
-                    </Button>
-                    <IconButton
-                        onClick={handleOpenConfigDrawer}
-                    >
-                        <GearIcon/>
-                    </IconButton>
-                </Stack>
-            </Stack>
+  // If parent passes a new initial (e.g., remap), rehydrate the form
+  useEffect(() => {
+    methods.reset(initial);
+  }, [initial, methods]);
 
-            {
-                wardrobes.map((wardrobe: Wardrobe, idx: number) => (
-                    <WardrobeLineItemEditor key={idx} wardrobe={wardrobe} index={idx}/>
-                ))
-            }
+  const submit = (data: MappedWardrobe) => {
+    onSave?.(data);                       // bubble up edited mapping
+    handleNext();                         // go to Review
+  };
 
+  return (
+    <FormProvider methods={methods} onSubmit={methods.handleSubmit(submit)}>
+      <Stack spacing={2}>
+        <WardrobeLineItemEditor />        {/* edits top-level RequiredDate + Lines */}
+        <Stack direction="row" spacing={1} justifyContent="flex-end">
+          <Button variant="outlined" onClick={handleBack}>
+            Back
+          </Button>
+          <Button variant="contained" type="submit">
+            Continue to Review
+          </Button>
         </Stack>
-    );
+      </Stack>
+    </FormProvider>
+  );
 }
