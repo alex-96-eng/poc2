@@ -47,23 +47,26 @@ const ReviewView = ({ salesOrder, mapping, handleEdit, handleUpload }: ReviewVie
     // Build camelCase payload (backend handles aliasing)
     // Build PascalCase payload (backend expects aliases)
     const body = {
-      CustomerReference: mapping.CustomerReference || supplierHeader.orderNumber,
-      RequiredDate: mapping.RequiredDate, // "YYYY-MM-DD"
-      Delivery: {
-        Name: mapping.Delivery?.Name ?? delivery.customerName ?? "",
-        AddressLine1: mapping.Delivery?.AddressLine1 ?? delivery.addressLine1 ?? "",
-        City: mapping.Delivery?.City ?? (delivery.addressLine2 || delivery.addressLine3 || ""),
-        Postcode: mapping.Delivery?.Postcode ?? (delivery.addressLine3 || ""),
-        Instructions:
-          (mapping.Delivery?.Instructions ?? delivery.deliveryNotes ?? "").trim(),
+      customerReference: mapping.CustomerReference || supplierHeader.orderNumber,
+      requiredDate: mapping.RequiredDate, // "YYYY-MM-DD"
+      delivery: {
+        name: mapping.Delivery?.Name ?? delivery.customerName ?? "",
+        addressLine1: mapping.Delivery?.AddressLine1 ?? delivery.addressLine1 ?? "",
+        city:
+          mapping.Delivery?.City ??
+          delivery.addressLine2 ??
+          delivery.addressLine3 ??
+          "",
+        postcode: mapping.Delivery?.Postcode ?? delivery.addressLine3 ?? "",
+        instructions: (mapping.Delivery?.Instructions ?? delivery.deliveryNotes ?? "").trim(),
       },
-      Lines: (mapping.Lines || []).map((l) => ({
-        ProductCode: l.ProductCode,
-        OrderQuantity: Number(l.OrderQuantity),
-        Comment: l.Comment ?? "",
-        // UnitPrice: ... // only include if your server requires it for a special SKU
+      lines: (mapping.Lines ?? []).map((l) => ({
+        productCode: l.ProductCode,
+        orderQuantity: Number(l.OrderQuantity),
+        comment: l.Comment && l.Comment.trim() ? l.Comment : null, // keep null if empty
+        // unitPrice: ... // only include if your server requires it for a special SKU
       })),
-      Comments: null,
+      comments: null,
     };
 
     setIsUploading(true);
