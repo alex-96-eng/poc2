@@ -1,12 +1,19 @@
 import useBands from "@/query/use-bands";
-import { Stack, Typography } from "@mui/material";
+import { Chip, CircularProgress, Divider, Stack, Typography } from "@mui/material";
+import Box from "@mui/material/Box";
 
 const ConfigBands = () => {
-    const { data } = useBands();
+    const { data, isLoading } = useBands();
     const bands = data?.bands ?? [];
 
+    if (isLoading) return (
+        <Stack justifyContent="center" alignItems="center" sx={{ height: "100%"}}>
+            <CircularProgress/>
+        </Stack>
+    );
+
     return (
-        <Stack spacing={2}>
+        <Stack spacing={2} divider={<Divider/>}>
             {
                 bands?.map((band, index) => (
                     <Stack key={`${band.label}-${index}`}>
@@ -29,11 +36,21 @@ const ConfigBands = () => {
                             </Stack>
                         </Stack>
                         <Typography variant="subtitle2" color="text.secondary">
-                            Aliases
+                            Will match on...
                         </Typography>
-                        <Typography variant="body2">
-                            {band.aliases.join(", ")}
-                        </Typography>
+                        <Stack direction="row" useFlexGap spacing={0.5} flexWrap="wrap">
+                            {
+                                band.aliases.map((item, index) => (
+                                    <Box key={`${item}-${index}`}>
+                                        <Chip
+                                            size="small"
+                                            label={item}
+                                            clickable={false}
+                                        />
+                                    </Box>
+                                ))
+                            }
+                        </Stack>
                     </Stack>
                 ))
             }

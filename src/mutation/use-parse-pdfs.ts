@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
-import { ParsedResponse, ParsedResponseSchema } from "@/types";
+import { SalesOrder, SalesOrderSchema } from "@/types";
 
 type useParsedPdfsProps = {
-    onSuccess?: (data: ParsedResponse) => void;
+    onSuccess?: (data: SalesOrder) => void;
 };
 
 const useParsePdfs = ({ onSuccess }: useParsedPdfsProps) => {
@@ -16,7 +16,7 @@ const useParsePdfs = ({ onSuccess }: useParsedPdfsProps) => {
                 body: formData,
             });
             const json = await response.json();
-            return ParsedResponseSchema.parse(json);
+            return SalesOrderSchema.parse(json);
         },
         onSuccess: async (data) => {
             onSuccess?.(data);

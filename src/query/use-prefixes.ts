@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { z } from "zod";
 
 export const PrefixSchema = z.object({
-    prefixes: z.array(z.object({
+    "internal-prefixes": z.array(z.object({
         aliases: z.array(z.string()),
         items: z.array(z.object({ code: z.string() })),
         label: z.string(),

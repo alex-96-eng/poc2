@@ -1,12 +1,19 @@
 import useColours from "@/query/use-colours";
-import { Stack, Typography } from "@mui/material";
+import { Chip, CircularProgress, Divider, Stack, Typography } from "@mui/material";
+import Box from "@mui/material/Box";
 
 const ConfigColours = () => {
-    const { data } = useColours();
+    const { data, isLoading } = useColours();
     const colours = data?.colours ?? [];
 
+    if (isLoading) return (
+        <Stack justifyContent="center" alignItems="center" sx={{ height: "100%"}}>
+            <CircularProgress/>
+        </Stack>
+    );
+
     return (
-        <Stack spacing={2}>
+        <Stack spacing={2} divider={<Divider/>}>
             {
                 colours?.map((colour, index) => (
                     <Stack key={`${colour.label}-${index}`}>
@@ -29,11 +36,21 @@ const ConfigColours = () => {
                             </Stack>
                         </Stack>
                         <Typography variant="subtitle2" color="text.secondary">
-                            Aliases
+                            Will match on...
                         </Typography>
-                        <Typography variant="body2">
-                            {colour.aliases.join(", ")}
-                        </Typography>
+                        <Stack direction="row" useFlexGap spacing={0.5} flexWrap="wrap">
+                            {
+                                colour.aliases.map((item, index) => (
+                                    <Box key={`${item}-${index}`}>
+                                        <Chip
+                                            size="small"
+                                            label={item}
+                                            clickable={false}
+                                        />
+                                    </Box>
+                                ))
+                            }
+                        </Stack>
                     </Stack>
                 ))
             }

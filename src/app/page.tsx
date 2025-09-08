@@ -7,7 +7,7 @@ import { Container, Stack, Step, StepLabel, Stepper } from "@mui/material";
 import Image from "next/image";
 import UploadView from "@/views/UploadView";
 import DetailedOrderView from "@/views/DetailedOrderView";
-import { ParsedResponse, ParsedResponseSchema } from "@/types";
+import { SalesOrder, SalesOrderSchema } from "@/types";
 import CompleteView from "@/views/CompleteView";
 import useParsePdfs from "@/mutation/use-parse-pdfs";
 import ConfigDrawer from "@/components/ConfigDrawer";
@@ -45,8 +45,7 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
 }));
 
 export default function PersistentDrawerRight() {
-    const [open, setOpen] = React.useState(false);
-
+    const [open, setOpen] = useState(false);
     const handleDrawerOpen = () => setOpen(true);
     const handleDrawerClose = () => setOpen(false);
 
@@ -59,10 +58,10 @@ export default function PersistentDrawerRight() {
     ];
 
     const [activeStep, setActiveStep] = useState(0);
-    const [parsedData, setParsedData] = useState<ParsedResponse | null>(null);
+    const [parsedData, setParsedData] = useState<SalesOrder | null>(null);
 
     const { mutate: handleUpload, isPending } = useParsePdfs({
-        onSuccess: (data: ParsedResponse) => {
+        onSuccess: (data: SalesOrder) => {
             setParsedData(data);
             setActiveStep(1); // jump to Confirm Details
         }
@@ -110,7 +109,7 @@ export default function PersistentDrawerRight() {
                             {parsedData && activeStep > 0 && activeStep < 4 && (
                                 <DetailedOrderView
                                     handleOpenConfigDrawer={handleDrawerOpen}
-                                    initialData={ParsedResponseSchema.parse(parsedData)}
+                                    initialData={SalesOrderSchema.parse(parsedData)}
                                     activeStep={activeStep}
                                     setActiveStep={setActiveStep}
                                 />

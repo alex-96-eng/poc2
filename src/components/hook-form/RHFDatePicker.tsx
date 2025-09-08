@@ -49,7 +49,6 @@ const RHFDatePicker = ({ label, name, required, slotProps, ...other }: RHFDatePi
                         ...slotProps,
                         textField: {
                             "aria-label": label,
-                            fullWidth: true,
                             error: !!error,
                             helperText: error?.message,
                             size: "small",

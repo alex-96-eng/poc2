@@ -1,13 +1,18 @@
 import useFrames from "@/query/use-frames";
-import { Stack, Typography } from "@mui/material";
+import { Box, Chip, CircularProgress, Divider, Stack, Typography } from "@mui/material";
 
 const ConfigFrames = () => {
-    const { data } = useFrames();
-    console.log(data);
+    const { data, isLoading } = useFrames();
     const frames = data?.frames ?? [];
 
+    if (isLoading) return (
+        <Stack justifyContent="center" alignItems="center" sx={{ height: "100%" }}>
+            <CircularProgress/>
+        </Stack>
+    );
+
     return (
-        <Stack spacing={2}>
+        <Stack spacing={2} divider={<Divider/>}>
             {
                 frames?.map((frame, index) => (
                     <Stack key={`${frame.label}-${index}`}>
@@ -30,11 +35,21 @@ const ConfigFrames = () => {
                             </Stack>
                         </Stack>
                         <Typography variant="subtitle2" color="text.secondary">
-                            Aliases
+                            Will match on...
                         </Typography>
-                        <Typography variant="body2">
-                            {frame.aliases.join(", ")}
-                        </Typography>
+                        <Stack direction="row" useFlexGap spacing={0.5} flexWrap="wrap">
+                            {
+                                frame.aliases.map((item, index) => (
+                                    <Box key={`${item}-${index}`}>
+                                        <Chip
+                                            size="small"
+                                            label={item}
+                                            clickable={false}
+                                        />
+                                    </Box>
+                                ))
+                            }
+                        </Stack>
                     </Stack>
                 ))
             }
