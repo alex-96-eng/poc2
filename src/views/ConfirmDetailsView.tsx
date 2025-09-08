@@ -44,17 +44,21 @@ export default function ConfirmDetailsView(
             <Stack direction="row" spacing={2} justifyContent="space-between">
                 <Typography variant="h4">Confirm Order Details</Typography>
                 <Stack direction="row" spacing={1}>
-                    <Button startIcon={<Close/>} variant="outlined" onClick={handleReset}>
+                    <Button size="small" startIcon={<Close/>} variant="outlined" onClick={handleReset}>
                         Start Over
                     </Button>
                     <Button
+                        size="small"
                         startIcon={<CheckOutlined/>}
                         variant="contained"
                         onClick={handleClick}
                     >
                         Next: Mappings
                     </Button>
-                    <IconButton onClick={handleOpenConfigDrawer}>
+                    <IconButton
+                        size="small"
+                        onClick={handleOpenConfigDrawer}
+                    >
                         <Settings/>
                     </IconButton>
                 </Stack>

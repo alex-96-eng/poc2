@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
-import { styled } from "@mui/material/styles";
+import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import { Container, Stack, Step, StepLabel, Stepper } from "@mui/material";
+import { Container, Stack, Step, StepLabel, Stepper, useMediaQuery } from "@mui/material";
 import Image from "next/image";
 import UploadView from "@/views/UploadView";
 import DetailedOrderView from "@/views/DetailedOrderView";
@@ -66,15 +66,23 @@ export default function PersistentDrawerRight() {
         }
     });
 
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.up("md"));
+
     return (
-        <Box sx={{ display: "flex" }}>
+        <Box sx={{ display: "flex", minHeight: "100vh" }}>
             <Main open={open}>
-                <Stack direction="row" sx={{ height: "100vh" }}>
+                <Stack direction={matches ? "row" : "column"} sx={{ flexGrow: 1, height: matches ? "100vh" : "unset" }}>
                     <Stack
                         direction="row"
                         alignItems="center"
                         justifyContent="center"
-                        sx={{ backgroundColor: "background.default", width: "25%", overflowY: "auto" }}
+                        sx={{
+                            backgroundColor: "background.default",
+                            width: matches ? "25%" : "100%",
+                            overflowY: "auto",
+                        }}
+                        pt={matches ? 0 : 8}
                     >
                         <Image
                             alt="global doors logo"
@@ -83,7 +91,11 @@ export default function PersistentDrawerRight() {
                             width={100}
                             style={{ position: "absolute", top: 16, left: 16 }}
                         />
-                        <Stepper orientation="vertical" sx={{ p: 2 }} activeStep={activeStep}>
+                        <Stepper
+                            orientation={matches ? "vertical" : "horizontal"}
+                            sx={{ p: 2 }}
+                            activeStep={activeStep}
+                        >
                             {steps.map((label) => (
                                 <Step key={label}>
                                     <StepLabel>{label}</StepLabel>
