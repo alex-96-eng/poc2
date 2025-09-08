@@ -45,23 +45,27 @@ const ReviewView = ({ salesOrder, mapping, handleEdit, handleUpload }: ReviewVie
     }
 
     // Build camelCase payload (backend handles aliasing)
+    // Build PascalCase payload (backend expects aliases)
     const body = {
-      customerReference: mapping.CustomerReference || supplierHeader.orderNumber,
-      requiredDate: mapping.RequiredDate, // ISO "YYYY-MM-DD"
-      delivery: {
-        name: mapping.Delivery.Name,
-        addressLine1: mapping.Delivery.AddressLine1,
-        city: mapping.Delivery.City ?? "",
-        postcode: mapping.Delivery.Postcode ?? "",
-        instructions: mapping.Delivery.Instructions ?? delivery.deliveryNotes ?? "",
+      CustomerReference: mapping.CustomerReference || supplierHeader.orderNumber,
+      RequiredDate: mapping.RequiredDate, // "YYYY-MM-DD"
+      Delivery: {
+        Name: mapping.Delivery?.Name ?? delivery.customerName ?? "",
+        AddressLine1: mapping.Delivery?.AddressLine1 ?? delivery.addressLine1 ?? "",
+        City: mapping.Delivery?.City ?? delivery.addressLine2 ?? delivery.addressLine3 ?? "",
+        Postcode: mapping.Delivery?.Postcode ?? delivery.addressLine3 ?? "",
+        Instructions:
+          mapping.Delivery?.Instructions ??
+          delivery.deliveryNotes ??
+          "",
       },
-      lines: mapping.Lines.map((l) => ({
-        productCode: l.ProductCode,
-        orderQuantity: Number(l.OrderQuantity),
-        comment: l.Comment ?? null,
-        // unitPrice intentionally omitted
+      Lines: mapping.Lines.map((l) => ({
+        ProductCode: l.ProductCode,
+        OrderQuantity: Number(l.OrderQuantity),
+        Comment: l.Comment ?? "",
+        // UnitPrice intentionally omitted
       })),
-      comments: null,
+      Comments: null,
     };
 
     setIsUploading(true);
