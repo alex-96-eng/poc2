@@ -43,7 +43,7 @@ const useSubmitSale = ({ onSuccess }: useSubmitSaleProps) => {
                 return;
             }
             const body = SalesOrderCreateSchema.parse(mapping);
-            const response = await fetch("http://localhost:8000/api/v1/sales-order", {
+            const response = await fetch("https://api-sandbox-da41.up.railway.app/api/v1/sales-order", {
                 method: "POST",
                 body: JSON.stringify(body),
                 headers: { "Content-Type": "application/json" }
