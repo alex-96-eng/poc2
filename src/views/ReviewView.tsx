@@ -20,14 +20,75 @@ import { ParsedResponse, MappedWardrobe } from "@/types";
 import { formatDate } from "@/lib/utils";
 
 type ReviewViewProps = {
-  salesOrder: ParsedResponse;              // Step 1 data (wardrobes etc.)
-  mapping: MappedWardrobe | null;         // Step 2 data (RequiredDate + Lines)
+  salesOrder: ParsedResponse;          // Step 1 data (wardrobes etc.)
+  mapping: MappedWardrobe | null;      // Step 2 data (RequiredDate + Lines)
   handleEdit: VoidFunction;
-  handleUpload: VoidFunction;
+  handleUpload: VoidFunction;          // Called AFTER successful upload (e.g., advance to success)
 };
 
 const ReviewView = ({ salesOrder, mapping, handleEdit, handleUpload }: ReviewViewProps) => {
   const { supplierHeader, delivery, wardrobes } = salesOrder;
+  const [isUploading, setIsUploading] = React.useState(false);
+
+  const uploadToUnleashed = async () => {
+    if (!mapping) {
+      alert("No mapped data to upload. Please complete the mapping step first.");
+      return;
+    }
+    if (!mapping.RequiredDate) {
+      alert("Required Date is missing. Please set it in Mapped Line Items.");
+      return;
+    }
+    if (!mapping.Lines || mapping.Lines.length === 0) {
+      alert("There are no mapped lines to upload.");
+      return;
+    }
+
+    // Build camelCase payload (backend handles aliasing)
+    const body = {
+      customerReference: mapping.CustomerReference || supplierHeader.orderNumber,
+      requiredDate: mapping.RequiredDate, // ISO "YYYY-MM-DD"
+      delivery: {
+        name: mapping.Delivery.Name,
+        addressLine1: mapping.Delivery.AddressLine1,
+        city: mapping.Delivery.City ?? "",
+        postcode: mapping.Delivery.Postcode ?? "",
+        instructions: mapping.Delivery.Instructions ?? delivery.deliveryNotes ?? "",
+      },
+      lines: mapping.Lines.map((l) => ({
+        productCode: l.ProductCode,
+        orderQuantity: Number(l.OrderQuantity),
+        comment: l.Comment ?? null,
+        // unitPrice intentionally omitted
+      })),
+      comments: null,
+    };
+
+    setIsUploading(true);
+    try {
+      const res = await fetch("https://api-sandbox-da41.up.railway.app/api/v1/sales-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        console.error(text);
+        alert("Upload failed:\n" + text);
+        setIsUploading(false);
+        return;
+        }
+
+      // Success — let parent move to the success step
+      handleUpload();
+    } catch (err) {
+      console.error("Upload failed:", err);
+      alert("Upload failed: " + (err as Error).message);
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   return (
     <Stack spacing={2}>
@@ -39,8 +100,13 @@ const ReviewView = ({ salesOrder, mapping, handleEdit, handleUpload }: ReviewVie
           <Button startIcon={<EditOutlined />} variant="outlined" onClick={handleEdit}>
             Edit
           </Button>
-          <Button startIcon={<FileUploadOutlined />} variant="contained" onClick={handleUpload}>
-            Upload to Unleashed
+          <Button
+            startIcon={<FileUploadOutlined />}
+            variant="contained"
+            onClick={uploadToUnleashed}
+            disabled={isUploading || !mapping}
+          >
+            {isUploading ? "Uploading..." : "Upload to Unleashed"}
           </Button>
         </Stack>
       </Stack>
@@ -225,15 +291,10 @@ const ReviewView = ({ salesOrder, mapping, handleEdit, handleUpload }: ReviewVie
                     </Grid>
                   </Grid>
 
-                  <Box
-                    component="table"
-                    sx={{ width: "100%", borderCollapse: "collapse", mt: 1 }}
-                  >
+                  <Box component="table" sx={{ width: "100%", borderCollapse: "collapse", mt: 1 }}>
                     <thead>
                       <tr>
-                        <th style={{ textAlign: "left", padding: 6, width: "40%" }}>
-                          Product Code
-                        </th>
+                        <th style={{ textAlign: "left", padding: 6, width: "40%" }}>Product Code</th>
                         <th style={{ textAlign: "left", padding: 6, width: "15%" }}>Qty</th>
                         <th style={{ textAlign: "left", padding: 6 }}>Comment</th>
                       </tr>
