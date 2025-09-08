@@ -25,13 +25,17 @@ type ReviewViewProps = {
     salesOrder: SalesOrder;          // Step 1 data (wardrobes etc.)
     mapping: MappedWardrobe;      // Step 2 data (RequiredDate + Lines)
     handleEdit: VoidFunction;
-    handleUpload: VoidFunction;          // Called AFTER successful upload (e.g., advance to success)
+    onSubmitSuccess: VoidFunction;
 };
 
-const ReviewView = ({ handleOpenConfigDrawer, salesOrder, mapping, handleEdit, handleUpload }: ReviewViewProps) => {
+const ReviewView = ({ handleOpenConfigDrawer, salesOrder, mapping, handleEdit, onSubmitSuccess }: ReviewViewProps) => {
     const { supplierHeader, delivery, wardrobes } = salesOrder;
 
-    const { mutate: submitSale, isPending } = useSubmitSale({});
+    const { mutate: submitSale, isPending } = useSubmitSale({
+        onSuccess: () => {
+            onSubmitSuccess();
+        }
+    });
     const uploadToUnleashed = async () => {
         const body: SalesOrderCreateInput = {
             customer_reference: mapping.CustomerReference || supplierHeader.orderNumber,
@@ -259,7 +263,8 @@ const ReviewView = ({ handleOpenConfigDrawer, salesOrder, mapping, handleEdit, h
                                 <Stack spacing={2}>
                                     <Grid container spacing={2}>
                                         <Grid size={{ xs: 12, md: 6 }}>
-                                            <DescriptionItem label="Required Date" value={mapping.RequiredDate.toDateString()}/>
+                                            <DescriptionItem label="Required Date"
+                                                             value={mapping.RequiredDate.toDateString()}/>
                                         </Grid>
                                     </Grid>
 

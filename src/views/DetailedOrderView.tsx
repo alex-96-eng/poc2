@@ -39,31 +39,6 @@ export default function DetailedOrderView({ initialData, activeStep, setActiveSt
         map(SalesOrderSchema.parse(payload));
     };
 
-    const handleUploadToBackend = async () => {
-        // Final upload should use mappedData (step 2 result)
-        if (!mappedData) {
-            alert("No mapped data to upload.");
-            return;
-        }
-        try {
-            const res = await fetch("https://api-sandbox-da41.up.railway.app/api/v1/sales-order", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(mappedData),
-            });
-            if (!res.ok) {
-                const text = await res.text();
-                console.error(text);
-                alert("Upload failed:\n" + text);
-                return;
-            }
-            setActiveStep(4); // success
-        } catch (err) {
-            console.error("Upload failed:", err);
-            alert("Upload failed: " + (err as Error).message);
-        }
-    };
-
     return (
         <>
             {activeStep === 1 && (
@@ -97,7 +72,7 @@ export default function DetailedOrderView({ initialData, activeStep, setActiveSt
                     salesOrder={methods.getValues()}      // step 1 values (SalesOrder)
                     mapping={mappedData}                  // step 2 mapping payload
                     handleEdit={() => setActiveStep(2)}
-                    handleUpload={handleUploadToBackend}
+                    onSubmitSuccess={() => setActiveStep(0)}
                 />
             )}
         </>
