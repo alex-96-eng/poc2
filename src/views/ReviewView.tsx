@@ -19,6 +19,7 @@ import AccessoryCard from "@/components/AccessoryCard";
 import { MappedWardrobe, SalesOrder } from "@/types";
 import { formatDate } from "@/lib/utils";
 import useSubmitSale, { SalesOrderCreateInput } from "@/mutation/use-submit-sale";
+import LoadingView from "@/views/LoadingView";
 
 type ReviewViewProps = {
     handleOpenConfigDrawer: VoidFunction;
@@ -34,7 +35,7 @@ const ReviewView = ({ handleOpenConfigDrawer, salesOrder, mapping, handleEdit, o
     const { mutate: submitSale, isPending } = useSubmitSale({
         onSuccess: () => {
             onSubmitSuccess();
-        }
+        },
     });
     const uploadToUnleashed = async () => {
         const body: SalesOrderCreateInput = {
@@ -62,6 +63,19 @@ const ReviewView = ({ handleOpenConfigDrawer, salesOrder, mapping, handleEdit, o
         console.log(JSON.stringify(body, null, 2));
         submitSale(body);
     };
+
+    const messages = [
+        "Uploading your line items...",
+        "Analysing your line items...",
+        "Extracting data...",
+        "Finalising..."
+    ];
+
+    if (isPending) {
+        return (
+            <LoadingView messages={messages}/>
+        )
+    }
 
     return (
         <Stack spacing={2}>

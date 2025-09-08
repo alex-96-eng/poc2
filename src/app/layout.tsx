@@ -4,6 +4,7 @@ import "./globals.css";
 import { PropsWithChildren } from "react";
 import ThemeProvider from "@/theme";
 import ReactQueryProvider from "@/components/ReactQueryProvider";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -29,6 +30,7 @@ export default function RootLayout({ children, }: PropsWithChildren) {
         <ThemeProvider>
             <ReactQueryProvider>
                 {children}
+                <Toaster />
             </ReactQueryProvider>
         </ThemeProvider>
         </body>

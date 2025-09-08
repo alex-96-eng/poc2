@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { SalesOrder } from "@/types";
 import { z } from "zod";
+import { toast } from "sonner";
 
 export const SalesOrderCreateSchema = z.object({
     customer_reference: z.string(),
@@ -51,11 +52,12 @@ const useSubmitSale = ({ onSuccess }: useSubmitSaleProps) => {
             return await response.json();
         },
         onSuccess: async (data) => {
+            toast.success("Sales order successfully created!")
             onSuccess?.(data);
         },
         onError: (err) => {
             console.error("Upload failed:", err);
-            alert("Upload failed. Please try again.");
+            toast.error("Upload failed. Please try again!")
         }
     });
 };

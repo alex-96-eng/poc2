@@ -21,6 +21,7 @@ import {
 } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import { formatData } from "@/lib/utils";
+import LoadingView from "@/views/LoadingView";
 
 interface UploadViewProps {
     handleUpload: ({ deliveryFile, supplierFile }: { deliveryFile: File, supplierFile: File }) => void;
@@ -76,6 +77,19 @@ const UploadView = ({ handleUpload, isPending = false }: UploadViewProps) => {
 
     const isUploadDisabled = !supplierAcceptedFiles.length || !deliveryAcceptedFiles.length;
 
+    const messages = [
+        "Uploading your delivery file...",
+        "Uploading your supplier file...",
+        "Analysing your files...",
+        "Extracting data...",
+        "Finalising..."
+    ];
+
+    if (isPending) {
+        return (
+            <LoadingView messages={messages} delay={2500}/>
+        )
+    }
     return (
         <Stack
             spacing={4}
@@ -145,7 +159,7 @@ const UploadView = ({ handleUpload, isPending = false }: UploadViewProps) => {
                                     >
                                         <input {...getDeliveryInputProps()} />
                                         <UploadFile fontSize="large" sx={{ color: "text.secondary" }}/>
-                                        <Typography>Drag 'n' drop your file here, or click to select file</Typography>
+                                        <Typography>Drag &#39;n&#39; drop your file here, or click to select file</Typography>
                                         <Typography variant="caption" color="text.secondary">
                                             (PDF only)
                                         </Typography>
@@ -219,7 +233,7 @@ const UploadView = ({ handleUpload, isPending = false }: UploadViewProps) => {
                                     >
                                         <input {...getSupplierInputProps()} />
                                         <UploadFile fontSize="large" sx={{ color: "text.secondary" }}/>
-                                        <Typography>Drag 'n' drop your file here, or click to select file</Typography>
+                                        <Typography>Drag &#39;n&#39; drop your file here, or click to select file</Typography>
                                         <Typography variant="caption" color="text.secondary">
                                             (PDF only)
                                         </Typography>
