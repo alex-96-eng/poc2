@@ -43,9 +43,6 @@ const ReviewView = ({ salesOrder, mapping, handleEdit, handleUpload }: ReviewVie
       alert("There are no mapped lines to upload.");
       return;
     }
-
-    // Build camelCase payload (backend handles aliasing)
-    // Build PascalCase payload (backend expects aliases)
     const body = {
       customerReference: mapping.CustomerReference || supplierHeader.orderNumber,
       requiredDate: mapping.RequiredDate, // "YYYY-MM-DD"
